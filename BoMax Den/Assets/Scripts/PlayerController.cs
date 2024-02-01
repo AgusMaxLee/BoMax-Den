@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 1;
+    [SerializeField] float jumpForce = 1;
+    [SerializeField] GameObject crosshair;
     Rigidbody rb;
     private bool isMoving = false;
-    bool isAiming = InputManager.isAimingInput;
+    private bool canJump = true; // Flag to track if the player can jump
+
+    // Reference to the aiming camera
+    public Camera aimingCamera;
 
     // Start is called before the first frame update
     void Start()
@@ -19,19 +25,27 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //rb.velocity = new Vector3(InputManager.movementInput.x * moveSpeed, rb.velocity.y, InputManager.movementInput.y * moveSpeed);
         MoveInDirectionOfCamera();
-        if (isAiming)
+
+        // Rotate player towards aiming camera direction when aiming
+        if (InputManager.isAimingInput && aimingCamera != null)
         {
-            TurnTowardsAimingDirection();
+            RotateTowardsAimingCamera();
         }
+
+        if (InputManager.isJumpInput && canJump)
+        {
+            Jump();
+        }
+        UpdateCrosshairVisibility();
     }
 
     private void MoveInDirectionOfCamera()
     {
-        // Get the input from the InputManager, I separate the inputs to make it easier to understand
+        // Get the input from the InputManager
         float horizontalInput = InputManager.movementInput.x;
         float verticalInput = InputManager.movementInput.y;
+        bool isSprinting = InputManager.isSprintingInput;
 
         // Calculate the FORWARD direction relative to the camera
         Vector3 forwardDirection = Camera.main.transform.forward;
@@ -44,55 +58,73 @@ public class PlayerController : MonoBehaviour
         Vector3 movementDirection = forwardDirection * verticalInput + rightDirection * horizontalInput;
         movementDirection.Normalize(); // Ensure the direction vector has a length of 1
 
+        // Calculate the speed based on whether sprinting or not
+        float currentMoveSpeed = isSprinting ? moveSpeed * 2 : moveSpeed;
+
         // Apply the movement to the Rigidbody
-        Vector3 movement = movementDirection * (moveSpeed * Time.deltaTime);
+        Vector3 movement = movementDirection * (currentMoveSpeed * Time.deltaTime);
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+
+        // Rotate the player towards the movement direction
         if (movementDirection != Vector3.zero)
         {
             TurnTowardsMovementDirection(movementDirection);
         }
     }
 
-
-    //Eventually, we will be using this method instead for a better feeling.
-    //The player will only move forward relative to the camera, not left, right or backwards
-    private void MoveOnlyForwardRelativeToCamera()
+    // Jump method to apply jump force
+    private void Jump()
     {
-        Vector3 moveInput = new Vector3(InputManager.turnInput.x, 0, InputManager.turnInput.y);
-        Vector3 moveDirection = (transform.forward * moveInput.z + transform.right * moveInput.x).normalized;
-        moveDirection.y = 0;
-        if (moveInput.z > 0)
-        {
-            if (!isMoving)
-            {
-                moveDirection = Camera.main.transform.forward;
-                moveDirection.y = 0;
-                TurnTowardsMovementDirection(moveDirection);
-                isMoving = true;
-                
-            }
-        }
-        else
-        {
-            isMoving = false;
-        }
-    
-        Vector3 movement = moveDirection.normalized * (moveSpeed * Time.fixedDeltaTime);
-        rb.MovePosition(rb.position + movement);
-        
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        canJump = false; // Disable jumping until the player hits the floor again
     }
-
-    //This function will make sure that the player is rotated towards the direction assigned in the parameter
     private void TurnTowardsMovementDirection(Vector3 moveDirection)
     {
         //This will create a rotation that looks in the direction of the moveDirection parameter
-        Quaternion targetRotation = Quaternion.LookRotation(moveDirection); 
+        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
         rb.rotation = targetRotation;
     }
-    private void TurnTowardsAimingDirection()
+    // Rotate player towards aiming camera direction
+    private void RotateTowardsAimingCamera()
     {
-        Quaternion targetRotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        rb.rotation = targetRotation;
+        if (aimingCamera != null)
+        {
+            // Get the direction from the player to the aiming camera
+            Vector3 lookDirection = aimingCamera.transform.position - transform.position;
+            lookDirection.y = 0; // Ensure the player doesn't tilt upwards or downwards
+
+            // Rotate the player towards the aiming camera's direction
+            if (lookDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(-lookDirection);
+                rb.rotation = targetRotation;
+            }
+        }
     }
 
+    // Detect when the player hits the floor
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            canJump = true; // Reset the ability to jump when hitting the floor
+        }
+    }
+    private void UpdateCrosshairVisibility()
+    {
+        if (crosshair != null)
+        {
+            // Check if aiming is enabled
+            if (InputManager.isAimingInput)
+            {
+                // Enable the crosshair GameObject
+                crosshair.SetActive(true);
+            }
+            else
+            {
+                // Disable the crosshair GameObject
+                crosshair.SetActive(false);
+            }
+        }
+    }
 }

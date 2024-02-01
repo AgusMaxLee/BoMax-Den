@@ -5,12 +5,13 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-
     PlayerControls controls;
 
     public static Vector2 movementInput;
     public static Vector2 turnInput;
     public static bool isAimingInput = false;
+    public static bool isJumpInput = false;
+    public static bool isSprintingInput = false; // New sprint input
 
     private void Awake()
     {
@@ -28,6 +29,12 @@ public class InputManager : MonoBehaviour
         controls.Player.Aiming.performed += ctx => isAimingInput = true;
         controls.Player.Aiming.canceled += ctx => isAimingInput = false;
 
+        controls.Player.Jump.performed += ctx => isJumpInput = true;
+        controls.Player.Jump.canceled += ctx => isJumpInput = false;
+
+        controls.Player.Sprint.performed += ctx => isSprintingInput = true;
+        controls.Player.Sprint.canceled += ctx => isSprintingInput = false;
+
         controls.Player.Enable();
     }
 
@@ -38,6 +45,12 @@ public class InputManager : MonoBehaviour
 
         controls.Player.Turn.performed -= Turn;
         controls.Player.Turn.canceled -= Turn;
+
+        controls.Player.Jump.performed -= ctx => isJumpInput = true;
+        controls.Player.Jump.canceled -= ctx => isJumpInput = false;
+
+        controls.Player.Sprint.performed -= ctx => isSprintingInput = true;
+        controls.Player.Sprint.canceled -= ctx => isSprintingInput = false;
     }
 
     private void Move(InputAction.CallbackContext ctx)
@@ -50,5 +63,4 @@ public class InputManager : MonoBehaviour
     {
         turnInput = ctx.ReadValue<Vector2>();
     }
-
 }
