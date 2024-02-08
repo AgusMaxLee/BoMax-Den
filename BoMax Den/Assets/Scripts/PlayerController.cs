@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce = 1;
     [SerializeField] GameObject crosshair;
     Rigidbody rb;
+    private Renderer playerRenderer;
     private bool isMoving = false;
     private bool canJump = true; // Flag to track if the player can jump
 
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     {
         //Caching
         rb = GetComponent<Rigidbody>();
+        playerRenderer = GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -126,5 +128,9 @@ public class PlayerController : MonoBehaviour
                 crosshair.SetActive(false);
             }
         }
+    }
+    public void ChangePlayerColor(Color newColor)
+    {
+        playerRenderer.material.color = newColor;
     }
 }
