@@ -11,7 +11,8 @@ public class InputManager : MonoBehaviour
     public static Vector2 turnInput;
     public static bool isAimingInput = false;
     public static bool isJumpInput = false;
-    public static bool isSprintingInput = false; // New sprint input
+    public static bool isSprintingInput = false;
+    public static bool isShootingInput = false;
 
     private void Awake()
     {
@@ -35,6 +36,9 @@ public class InputManager : MonoBehaviour
         controls.Player.Sprint.performed += ctx => isSprintingInput = true;
         controls.Player.Sprint.canceled += ctx => isSprintingInput = false;
 
+        controls.Player.Shoot.performed += ctx => isShootingInput = true;
+        controls.Player.Shoot.canceled += ctx => isShootingInput = false;
+
         controls.Player.Enable();
     }
 
@@ -51,6 +55,9 @@ public class InputManager : MonoBehaviour
 
         controls.Player.Sprint.performed -= ctx => isSprintingInput = true;
         controls.Player.Sprint.canceled -= ctx => isSprintingInput = false;
+
+        controls.Player.Shoot.performed -= ctx => isShootingInput = true;
+        controls.Player.Shoot.canceled -= ctx => isShootingInput = false;
     }
 
     private void Move(InputAction.CallbackContext ctx)

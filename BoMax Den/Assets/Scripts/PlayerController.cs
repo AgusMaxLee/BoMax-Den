@@ -8,10 +8,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveSpeed = 1;
     [SerializeField] float jumpForce = 1;
     [SerializeField] GameObject crosshair;
+    [SerializeField] private Transform projectileSpawnPoint;
+    public GameObject bulletPrefab;
+    public float bulletSpeed = 10f;
     Rigidbody rb;
     private Renderer playerRenderer;
     private bool isMoving = false;
-    private bool canJump = true; // Flag to track if the player can jump
+    private bool canJump = true;
 
     // Reference to the aiming camera
     public Camera aimingCamera;
@@ -29,7 +32,6 @@ public class PlayerController : MonoBehaviour
     {
         MoveInDirectionOfCamera();
 
-        // Rotate player towards aiming camera direction when aiming
         if (InputManager.isAimingInput && aimingCamera != null)
         {
             RotateTowardsAimingCamera();
@@ -39,12 +41,16 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
+
+        if (InputManager.isShootingInput)
+        {
+            Shoot();
+        }
         UpdateCrosshairVisibility();
     }
 
     private void MoveInDirectionOfCamera()
     {
-        // Get the input from the InputManager
         float horizontalInput = InputManager.movementInput.x;
         float verticalInput = InputManager.movementInput.y;
         bool isSprinting = InputManager.isSprintingInput;
@@ -74,12 +80,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Jump method to apply jump force
     private void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         canJump = false; // Disable jumping until the player hits the floor again
     }
+
+    private void Shoot()
+    {
+        GameObject bullet = Instantiate(bulletPrefab, projectileSpawnPoint.position, Quaternion.identity) as GameObject;
+        bullet.GetComponent<Rigidbody>().AddForce(transform.forward * bulletSpeed);
+        Destroy(bullet, 0.3f);
+    }    
     private void TurnTowardsMovementDirection(Vector3 moveDirection)
     {
         //This will create a rotation that looks in the direction of the moveDirection parameter
@@ -89,18 +101,15 @@ public class PlayerController : MonoBehaviour
     // Rotate player towards aiming camera direction
     private void RotateTowardsAimingCamera()
     {
-        if (aimingCamera != null)
-        {
-            // Get the direction from the player to the aiming camera
-            Vector3 lookDirection = aimingCamera.transform.position - transform.position;
-            lookDirection.y = 0; // Ensure the player doesn't tilt upwards or downwards
+        Vector3 lookDirection = Camera.main.transform.forward;// - transform.position;
+        //lookDirection.y = 0; // Ensure the player doesn't tilt upwards or downwards
 
-            // Rotate the player towards the aiming camera's direction
-            if (lookDirection != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(-lookDirection);
-                rb.rotation = targetRotation;
-            }
+        // Rotate the player towards the aiming camera's direction
+        if (lookDirection != Vector3.zero)
+        {
+            //Quaternion targetRotation = Camera.main.transform.rotation;
+            //rb.rotation = targetRotation;
+            this.transform.rotation = Quaternion.LookRotation(lookDirection);
         }
     }
 
@@ -116,15 +125,12 @@ public class PlayerController : MonoBehaviour
     {
         if (crosshair != null)
         {
-            // Check if aiming is enabled
             if (InputManager.isAimingInput)
             {
-                // Enable the crosshair GameObject
                 crosshair.SetActive(true);
             }
             else
             {
-                // Disable the crosshair GameObject
                 crosshair.SetActive(false);
             }
         }

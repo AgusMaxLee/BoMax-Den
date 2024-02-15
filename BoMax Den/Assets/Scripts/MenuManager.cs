@@ -71,7 +71,7 @@ public class MenuManager : MonoBehaviour
     public void EnterGame()
     {
         Debug.Log("Loading Menu Scene...");
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MainTest");
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         gameIsPaused = false;
