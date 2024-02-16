@@ -68,10 +68,8 @@ public class EnemyHealth : MonoBehaviour
             onTakeDamage?.Invoke(amount);
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
             Debug.Log("Enemy took damage. Current Health: " + currentHealth);
-            while(isTakingDamage)
-            {
-                animator.SetInteger("State", 1);
-            }
+            
+            animator.SetInteger("State", 1);
 
             if (currentHealth <= 0)
             {

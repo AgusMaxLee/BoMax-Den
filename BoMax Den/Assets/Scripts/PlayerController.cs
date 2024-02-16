@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpForce = 1;
     [SerializeField] GameObject crosshair;
     [SerializeField] private Transform projectileSpawnPoint;
+    [SerializeField] private Animator animator;
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
     Rigidbody rb;
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
         {
             Shoot();
         }
+
         UpdateCrosshairVisibility();
     }
 
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
         // Calculate the speed based on whether sprinting or not
         float currentMoveSpeed = isSprinting ? moveSpeed * 2 : moveSpeed;
-
+ 
         // Apply the movement to the Rigidbody
         Vector3 movement = movementDirection * (currentMoveSpeed * Time.deltaTime);
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
