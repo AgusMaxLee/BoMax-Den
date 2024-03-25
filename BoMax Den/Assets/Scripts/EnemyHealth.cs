@@ -8,16 +8,11 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private int currentHealth, maxHealth = 100;
     public UnityEvent<int> onTakeDamage;
-    
 
-    // Time duration for the "Hit" animation state
     [SerializeField] private float hitAnimationDuration = 1f;
     private bool isTakingDamage = false;
-
-    // Time to wait before resetting animation and health after death
-    [SerializeField] private float resetDelay = 15f;
-    private float deathTimer = 0f;
     private bool isDead = false;
+    private bool isRecovering = false;
 
     [SerializeField] FloatingHealthBar healthBar;
 
@@ -25,59 +20,74 @@ public class EnemyHealth : MonoBehaviour
     {
         healthBar = GetComponentInChildren<FloatingHealthBar>();
     }
+
     public void Start()
     {
         currentHealth = maxHealth;
         healthBar.UpdateHealthBar(currentHealth, maxHealth);
     }
+
     void Update()
     {
-        // Check if the enemy is dead
-        if (isDead)
-        {
-            deathTimer += Time.deltaTime;
-            if (deathTimer >= resetDelay)
-            {
-                // Reset animation and health
-                animator.SetInteger("State", 0);
-                currentHealth = maxHealth;
-                isDead = false;
-                deathTimer = 0f;
-            }
-        }
-
-        // Check if the enemy is currently taking damage and the hit animation duration has passed
-        if (isTakingDamage)
+        if (isRecovering)
         {
             hitAnimationDuration -= Time.deltaTime;
             if (hitAnimationDuration <= 0f)
             {
-                // Return to the default state
-                animator.SetInteger("State", 0);
-                isTakingDamage = false;
-                hitAnimationDuration = 1f; // Reset hit animation duration for the next hit
+                currentHealth = maxHealth;
+                healthBar.UpdateHealthBar(currentHealth, maxHealth);
+                isRecovering = false;
+                animator.SetBool("Recover", true); // Transition to recover animation
+                animator.SetBool("Dead", false); // Reset dead animation state
+                isTakingDamage = false; // Reset taking damage flag
+                isDead = false; // Reset dead flag
             }
         }
     }
 
     public void TakeDamage(int amount)
     {
-        if (!isTakingDamage && !isDead)
+        if (!isDead && !isRecovering)
         {
             currentHealth -= amount;
             onTakeDamage?.Invoke(amount);
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
             Debug.Log("Enemy took damage. Current Health: " + currentHealth);
-            
-            animator.SetInteger("State", 1);
 
+            animator.SetBool("Hit", true);
+
+            // Invoke a method to reset "Hit" after 2 seconds
+            Invoke("ResetHitParameter", 0.5f);
+            
             if (currentHealth <= 0)
             {
-                animator.SetInteger("State", 2);
                 isDead = true;
+                animator.SetBool("Dead", true);
+                StartRecovery();
             }
-
-            isTakingDamage = true;
+            else
+            {
+                isTakingDamage = true; // Set taking damage flag
+            }
         }
     }
+
+    private void ResetHitParameter()
+    {
+        animator.SetBool("Hit", false);
+    }
+
+    private void StartRecovery()
+    {
+        isRecovering = true;
+        hitAnimationDuration = 2f; // Set recovery duration
+        animator.SetBool("Recover", false); // Ensure Recover parameter is set to false initially
+    }
+
+    // Called by animation event when the recovery animation finishes
+    public void OnRecoveryComplete()
+    {
+        animator.SetBool("Recover", true); // Transition back to idle animation
+    }
 }
+

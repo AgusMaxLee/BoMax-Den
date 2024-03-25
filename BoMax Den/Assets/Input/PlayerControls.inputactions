@@ -51,12 +51,57 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shoot",
+                    "name": "SwingSword",
                     "type": "Button",
                     "id": "599d1b26-93cb-47ef-80dc-a1843be5fa2b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShootFire",
+                    "type": "Button",
+                    "id": "7e4bc997-3c47-40d5-bb92-af4c25690889",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(pressPoint=0.3)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShootWater",
+                    "type": "Button",
+                    "id": "3737b539-a751-493f-b7bf-88a4849ee7fe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(pressPoint=1)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ShootEarth",
+                    "type": "Button",
+                    "id": "64c1b0bf-dbe8-47e2-bcd0-887602533a01",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold,Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill",
+                    "type": "Button",
+                    "id": "4e9cd257-82b2-4313-b3b0-14de5393b1bf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Ultimate",
+                    "type": "Button",
+                    "id": "94222b30-02d6-4980-9531-e2eb8b7c542a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -277,7 +322,62 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "SwingSword",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42e21bb1-73eb-4498-9569-c90f215bbad3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShootFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7389e4ed-2466-482d-a4ad-ad5359f7adb3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShootWater",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "603c8732-d921-4900-b6bb-95fd8cb220f8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShootEarth",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ff9cb0c-b6d9-4156-bc5d-47ac1fd21de4",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "abb5c2e9-983d-49d4-8b9e-52de12dc2862",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ultimate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

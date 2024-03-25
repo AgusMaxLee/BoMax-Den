@@ -1,41 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerController;
 
 public class Collectable : MonoBehaviour
 {
-    public enum CollectibleType
-    {
-        Earth,
-        Water,
-        Fire
-    }
-
-    public CollectibleType collectibleType;
-    public Color collectibleColor;
+    public PlayerController playerController;
+    public PlayerState newState;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            gameObject.SetActive(false);
+            // Switch player state when the collectible is grabbed
+            playerController.SwitchPlayerState(newState);
 
-            PlayerController playerController = other.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                switch (collectibleType)
-                {
-                    case CollectibleType.Earth:
-                        playerController.ChangePlayerColor(Color.green);
-                        break;
-                    case CollectibleType.Water:
-                        playerController.ChangePlayerColor(Color.blue);
-                        break;
-                    case CollectibleType.Fire:
-                        playerController.ChangePlayerColor(Color.red);
-                        break;
-                }
-            }
+            gameObject.SetActive(true); // Deactivate the collectible object
         }
     }
 }
