@@ -1,23 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerController;
 
 public class PlayerAnimator : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-
-    //private void OnEnable()
-    //{
-    //    InputManager.onTakeDamage.AddListener(PlayTakeDamageAnimation);
-    //    InputManager.onPlayerDeath.AddListener(PlayDeathAnimation);
-    //}
-
-    //private void OnDisable()
-    //{
-    //    InputManager.onTakeDamage.RemoveListener(PlayTakeDamageAnimation);
-    //    InputManager.onPlayerDeath.RemoveListener(PlayDeathAnimation);
-    //}
-
+    [SerializeField] private PlayerState currentPlayerState;
+    private Vector2 movementInput;
+    private float movementMagnitude;
+    void Start()
+    {
+        // Initialize movementInput once in the Start() method
+        movementInput = Vector2.zero;
+        movementMagnitude = 0f;
+    }
     private void Update()
     {
         UpdateMovementAnimation();
@@ -25,12 +22,12 @@ public class PlayerAnimator : MonoBehaviour
         UpdateJumpAnimation();
         UpdateSprintAnimation();
         UpdateShootAnimation();
+        UpdateSkillAnimation();
     }
-
     private void UpdateMovementAnimation()
     {
-        Vector2 movementInput = InputManager.movementInput;
-        float movementMagnitude = movementInput.magnitude;
+        movementInput = InputManager.movementInput;
+        movementMagnitude = movementInput.magnitude; 
 
         if (movementMagnitude > 0)
         {
@@ -45,7 +42,22 @@ public class PlayerAnimator : MonoBehaviour
     private void UpdateAimingAnimation()
     {
         bool isAiming = InputManager.isAimingInput;
-        animator.SetBool("IsAiming", isAiming);
+
+        switch (currentPlayerState)
+        {
+            case PlayerState.Normal:
+                animator.SetBool("Aiming_Normal", isAiming);
+                break;
+            case PlayerState.Fire:
+                animator.SetBool("Aiming_Fire", isAiming);
+                break;
+            case PlayerState.Water:
+                animator.SetBool("Aiming_Water", isAiming);
+                break;
+            case PlayerState.Earth:
+                animator.SetBool("Aiming_Earth", isAiming);
+                break;
+        }
     }
 
     private void UpdateJumpAnimation()
@@ -57,13 +69,53 @@ public class PlayerAnimator : MonoBehaviour
     private void UpdateSprintAnimation()
     {
         bool isSprinting = InputManager.isSprintingInput;
-        animator.SetBool("Running", isSprinting);
+        animator.SetBool("Running", isSprinting && movementMagnitude > 0);
     }
 
     private void UpdateShootAnimation()
     {
-        bool isShooting = InputManager.isShootingInput;
-        animator.SetBool("Shooting", isShooting);
+        bool isShooting = InputManager.isSwingingInput;
+
+        switch (currentPlayerState)
+        {
+            case PlayerState.Normal:
+                animator.SetBool("Shooting_Normal", isShooting);
+                break;
+            case PlayerState.Fire:
+                animator.SetBool("Shooting_Fire", isShooting);
+                break;
+            case PlayerState.Water:
+                animator.SetBool("Shooting_Water", isShooting);
+                break;
+            case PlayerState.Earth:
+                animator.SetBool("Shooting_Earth", isShooting);
+                break;
+
+        }
+    }
+    private void UpdateSkillAnimation()
+    {
+        bool isUsingSkill = InputManager.isSkillInput;
+
+        switch (currentPlayerState)
+        {
+            case PlayerState.Normal:
+                animator.SetBool("Skill_Normal", isUsingSkill);
+                break;
+            case PlayerState.Fire:
+                animator.SetBool("Skill_Fire", isUsingSkill);
+                break;
+            case PlayerState.Water:
+                animator.SetBool("Skill_Water", isUsingSkill);
+                break;
+            case PlayerState.Earth:
+                animator.SetBool("Skill_Earth", isUsingSkill);
+                break;
+        }
+    }
+    public void UpdatePlayerState(PlayerState newState)
+    {
+        currentPlayerState = newState;
     }
 
     private void PlayTakeDamageAnimation(int amount)
@@ -74,5 +126,5 @@ public class PlayerAnimator : MonoBehaviour
     private void PlayDeathAnimation()
     {
         animator.SetTrigger("Die");
-    }
-}
+    } 
+}  

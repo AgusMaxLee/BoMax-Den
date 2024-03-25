@@ -1,24 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using static EnemyHealth;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] public float speed = 1f;
-    [SerializeField] public int damage = 5;
-    public GameObject bulletPrefab;
-    public Rigidbody rb;
-    // Update is called once per frame
-    void Start()
+    [SerializeField] private int damage = 5;
+
+    private Rigidbody rb;
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
-    public void OnTriggerEnter(Collider collision)
+
+    private void OnCollisionEnter(Collision collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            collision.GetComponent<EnemyHealth>().TakeDamage(damage);
+            collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(damage);
+            Destroy(this.gameObject);   
         }
-    }   
+    }
 }

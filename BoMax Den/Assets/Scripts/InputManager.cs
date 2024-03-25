@@ -12,7 +12,12 @@ public class InputManager : MonoBehaviour
     public static bool isAimingInput = false;
     public static bool isJumpInput = false;
     public static bool isSprintingInput = false;
-    public static bool isShootingInput = false;
+    public static bool isSwingingInput = false;
+    public static bool isShootingFireInput = false;
+    public static bool isShootingWaterInput = false;
+    public static bool isShootingEarthInput = false;
+    public static bool isSkillInput = false;
+    public static bool isUltimateInput = false;
 
     private void Awake()
     {
@@ -36,8 +41,25 @@ public class InputManager : MonoBehaviour
         controls.Player.Sprint.performed += ctx => isSprintingInput = true;
         controls.Player.Sprint.canceled += ctx => isSprintingInput = false;
 
-        controls.Player.Shoot.performed += ctx => isShootingInput = true;
-        controls.Player.Shoot.canceled += ctx => isShootingInput = false;
+        controls.Player.SwingSword.performed += ctx => isSwingingInput = true;
+        controls.Player.SwingSword.canceled += ctx => isSwingingInput = false;
+
+        controls.Player.ShootFire.performed += ctx => isShootingFireInput = true;
+        controls.Player.ShootFire.canceled += ctx => isShootingFireInput = false;
+
+        controls.Player.ShootWater.performed += ctx => isShootingWaterInput = true;
+        controls.Player.ShootWater.canceled += ctx => isShootingWaterInput = false;
+
+        controls.Player.ShootEarth.performed += ctx => isShootingEarthInput = true;
+        controls.Player.ShootEarth.canceled += ctx => isShootingEarthInput = false;
+
+        controls.Player.Skill.performed += ctx => isSkillInput = true;
+        controls.Player.Skill.canceled += ctx => isSkillInput = false;
+
+        controls.Player.Ultimate.performed += ctx => isUltimateInput = true;
+        controls.Player.Ultimate.canceled += ctx => isUltimateInput = false;
+
+
 
         controls.Player.Enable();
     }
@@ -56,8 +78,23 @@ public class InputManager : MonoBehaviour
         controls.Player.Sprint.performed -= ctx => isSprintingInput = true;
         controls.Player.Sprint.canceled -= ctx => isSprintingInput = false;
 
-        controls.Player.Shoot.performed -= ctx => isShootingInput = true;
-        controls.Player.Shoot.canceled -= ctx => isShootingInput = false;
+        controls.Player.SwingSword.performed -= ctx => isSwingingInput = true;
+        controls.Player.SwingSword.canceled -= ctx => isSwingingInput = false;
+
+        controls.Player.ShootFire.performed -= ctx => isShootingFireInput = true;
+        controls.Player.ShootFire.canceled -= ctx => isShootingFireInput = false;
+
+        controls.Player.ShootWater.performed -= ctx => isShootingWaterInput = true;
+        controls.Player.ShootWater.canceled -= ctx => isShootingWaterInput = false;
+
+        controls.Player.ShootEarth.performed -= ctx => isShootingEarthInput = true;
+        controls.Player.ShootEarth.canceled -= ctx => isShootingEarthInput = false;
+
+        controls.Player.Skill.performed -= ctx => isSkillInput = true;
+        controls.Player.Skill.canceled -= ctx => isSkillInput = false;
+
+        controls.Player.Ultimate.performed -= ctx => isUltimateInput = true;
+        controls.Player.Ultimate.canceled -= ctx => isUltimateInput = false;
     }
 
     private void Move(InputAction.CallbackContext ctx)
