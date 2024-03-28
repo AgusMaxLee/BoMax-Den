@@ -73,12 +73,57 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Shoot"",
+                    ""name"": ""SwingSword"",
                     ""type"": ""Button"",
                     ""id"": ""599d1b26-93cb-47ef-80dc-a1843be5fa2b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e4bc997-3c47-40d5-bb92-af4c25690889"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(pressPoint=0.3)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootWater"",
+                    ""type"": ""Button"",
+                    ""id"": ""3737b539-a751-493f-b7bf-88a4849ee7fe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold(pressPoint=1)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootEarth"",
+                    ""type"": ""Button"",
+                    ""id"": ""64c1b0bf-dbe8-47e2-bcd0-887602533a01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold,Press(behavior=2)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e9cd257-82b2-4313-b3b0-14de5393b1bf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ultimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""94222b30-02d6-4980-9531-e2eb8b7c542a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -299,7 +344,62 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shoot"",
+                    ""action"": ""SwingSword"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42e21bb1-73eb-4498-9569-c90f215bbad3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7389e4ed-2466-482d-a4ad-ad5359f7adb3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootWater"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""603c8732-d921-4900-b6bb-95fd8cb220f8"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootEarth"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ff9cb0c-b6d9-4156-bc5d-47ac1fd21de4"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abb5c2e9-983d-49d4-8b9e-52de12dc2862"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ultimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -343,7 +443,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Aiming = m_Player.FindAction("Aiming", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        m_Player_SwingSword = m_Player.FindAction("SwingSword", throwIfNotFound: true);
+        m_Player_ShootFire = m_Player.FindAction("ShootFire", throwIfNotFound: true);
+        m_Player_ShootWater = m_Player.FindAction("ShootWater", throwIfNotFound: true);
+        m_Player_ShootEarth = m_Player.FindAction("ShootEarth", throwIfNotFound: true);
+        m_Player_Skill = m_Player.FindAction("Skill", throwIfNotFound: true);
+        m_Player_Ultimate = m_Player.FindAction("Ultimate", throwIfNotFound: true);
         // Vehicle
         m_Vehicle = asset.FindActionMap("Vehicle", throwIfNotFound: true);
         m_Vehicle_Newaction = m_Vehicle.FindAction("New action", throwIfNotFound: true);
@@ -413,7 +518,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Aiming;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_SwingSword;
+    private readonly InputAction m_Player_ShootFire;
+    private readonly InputAction m_Player_ShootWater;
+    private readonly InputAction m_Player_ShootEarth;
+    private readonly InputAction m_Player_Skill;
+    private readonly InputAction m_Player_Ultimate;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -423,7 +533,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Aiming => m_Wrapper.m_Player_Aiming;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @SwingSword => m_Wrapper.m_Player_SwingSword;
+        public InputAction @ShootFire => m_Wrapper.m_Player_ShootFire;
+        public InputAction @ShootWater => m_Wrapper.m_Player_ShootWater;
+        public InputAction @ShootEarth => m_Wrapper.m_Player_ShootEarth;
+        public InputAction @Skill => m_Wrapper.m_Player_Skill;
+        public InputAction @Ultimate => m_Wrapper.m_Player_Ultimate;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -448,9 +563,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @Shoot.started += instance.OnShoot;
-            @Shoot.performed += instance.OnShoot;
-            @Shoot.canceled += instance.OnShoot;
+            @SwingSword.started += instance.OnSwingSword;
+            @SwingSword.performed += instance.OnSwingSword;
+            @SwingSword.canceled += instance.OnSwingSword;
+            @ShootFire.started += instance.OnShootFire;
+            @ShootFire.performed += instance.OnShootFire;
+            @ShootFire.canceled += instance.OnShootFire;
+            @ShootWater.started += instance.OnShootWater;
+            @ShootWater.performed += instance.OnShootWater;
+            @ShootWater.canceled += instance.OnShootWater;
+            @ShootEarth.started += instance.OnShootEarth;
+            @ShootEarth.performed += instance.OnShootEarth;
+            @ShootEarth.canceled += instance.OnShootEarth;
+            @Skill.started += instance.OnSkill;
+            @Skill.performed += instance.OnSkill;
+            @Skill.canceled += instance.OnSkill;
+            @Ultimate.started += instance.OnUltimate;
+            @Ultimate.performed += instance.OnUltimate;
+            @Ultimate.canceled += instance.OnUltimate;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -470,9 +600,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @Shoot.started -= instance.OnShoot;
-            @Shoot.performed -= instance.OnShoot;
-            @Shoot.canceled -= instance.OnShoot;
+            @SwingSword.started -= instance.OnSwingSword;
+            @SwingSword.performed -= instance.OnSwingSword;
+            @SwingSword.canceled -= instance.OnSwingSword;
+            @ShootFire.started -= instance.OnShootFire;
+            @ShootFire.performed -= instance.OnShootFire;
+            @ShootFire.canceled -= instance.OnShootFire;
+            @ShootWater.started -= instance.OnShootWater;
+            @ShootWater.performed -= instance.OnShootWater;
+            @ShootWater.canceled -= instance.OnShootWater;
+            @ShootEarth.started -= instance.OnShootEarth;
+            @ShootEarth.performed -= instance.OnShootEarth;
+            @ShootEarth.canceled -= instance.OnShootEarth;
+            @Skill.started -= instance.OnSkill;
+            @Skill.performed -= instance.OnSkill;
+            @Skill.canceled -= instance.OnSkill;
+            @Ultimate.started -= instance.OnUltimate;
+            @Ultimate.performed -= instance.OnUltimate;
+            @Ultimate.canceled -= instance.OnUltimate;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -543,7 +688,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnAiming(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnShoot(InputAction.CallbackContext context);
+        void OnSwingSword(InputAction.CallbackContext context);
+        void OnShootFire(InputAction.CallbackContext context);
+        void OnShootWater(InputAction.CallbackContext context);
+        void OnShootEarth(InputAction.CallbackContext context);
+        void OnSkill(InputAction.CallbackContext context);
+        void OnUltimate(InputAction.CallbackContext context);
     }
     public interface IVehicleActions
     {
