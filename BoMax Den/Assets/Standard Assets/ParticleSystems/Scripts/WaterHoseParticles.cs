@@ -5,6 +5,7 @@ namespace UnityStandardAssets.Effects
 {
     public class WaterHoseParticles : MonoBehaviour
     {
+        /*
         public static float lastSoundTime;
         public float force = 1;
 
@@ -50,6 +51,6 @@ namespace UnityStandardAssets.Effects
                 i++;
 
             }
-        }
+        }*/
     }
 }

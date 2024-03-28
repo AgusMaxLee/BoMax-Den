@@ -1360,10 +1360,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5978482454524532137, guid: 39ec6af3eb8c70848b3da75dbf39628f, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1663,6 +1659,11 @@ CapsuleCollider:
   m_Height: 5.4458456
   m_Direction: 1
   m_Center: {x: -0.12528856, y: 1.8505734, z: 0.104434595}
+--- !u!1 &835580106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 840675014963068939, guid: 39ec6af3eb8c70848b3da75dbf39628f, type: 3}
+  m_PrefabInstance: {fileID: 492124181}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &875586471 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 137784740806856926, guid: ccd8c3b89aa02e943a08ab9238a8a70c, type: 3}
@@ -4352,6 +4353,7 @@ MonoBehaviour:
   earthBullet: {fileID: 3580850165668990844, guid: 5c24e6ce0ab7bd24e87d0d4faec14bd6, type: 3}
   flamethrowerParticles: {fileID: 1692298346}
   fireCollider: {fileID: 2008887780}
+  swordCollider: {fileID: 835580106}
   waterWave: {fileID: 0}
   earthBall: {fileID: 4534624831924110582, guid: 7ca57801fa8097f40a6a9405f26fd709, type: 3}
   flamethrowerSpawnPoint: {fileID: 1843620569}

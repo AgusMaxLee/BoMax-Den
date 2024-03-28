@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private ParticleSystem flamethrowerParticles;
     [SerializeField] private GameObject fireCollider;
+    [SerializeField] private GameObject swordCollider;
     [SerializeField] private GameObject waterWave;
     [SerializeField] private GameObject earthBall;
 
@@ -153,6 +154,18 @@ public class PlayerController : MonoBehaviour
         crosshair.SetActive(InputManager.isAimingInput);
     }
 
+    //Normal State Functions
+    private void HandleNormalAttack()
+    {
+        if (InputManager.isSwingingInput)
+        {
+            swordCollider.SetActive(true);
+        }
+        else
+        {
+            swordCollider.SetActive(false);
+        }
+    }
     // Fire State Functions
     private void HandleShootingFire()
     {
@@ -312,6 +325,8 @@ public class PlayerController : MonoBehaviour
         playerHealth.currentHealth = NormalHP;
         playerHealth.currentMana = NormalMana;
         moveSpeed = NormalSpeed;
+
+        HandleNormalAttack();
 
     }
 
