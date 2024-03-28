@@ -10,7 +10,6 @@ public class Sword : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Sword triggered enemy!");
             other.GetComponent<EnemyHealth>().TakeDamage(damage);
         }
     }
