@@ -17,7 +17,9 @@ public class InputManager : MonoBehaviour
     public static bool isShootingWaterInput = false;
     public static bool isShootingEarthInput = false;
     public static bool isSkillInput = false;
-    public static bool isUltimateInput = false;
+    public static bool isInteractInput = false;
+    public static bool isHealInput = false;
+
 
     private void Awake()
     {
@@ -56,8 +58,11 @@ public class InputManager : MonoBehaviour
         controls.Player.Skill.performed += ctx => isSkillInput = true;
         controls.Player.Skill.canceled += ctx => isSkillInput = false;
 
-        controls.Player.Ultimate.performed += ctx => isUltimateInput = true;
-        controls.Player.Ultimate.canceled += ctx => isUltimateInput = false;
+        controls.Player.Interact.performed += ctx => isInteractInput = true;
+        controls.Player.Interact.canceled += ctx => isInteractInput = false;
+
+        controls.Player.Heal.performed += ctx => isHealInput = true;
+        controls.Player.Heal.canceled += ctx => isHealInput = false;
 
 
 
@@ -93,8 +98,11 @@ public class InputManager : MonoBehaviour
         controls.Player.Skill.performed -= ctx => isSkillInput = true;
         controls.Player.Skill.canceled -= ctx => isSkillInput = false;
 
-        controls.Player.Ultimate.performed -= ctx => isUltimateInput = true;
-        controls.Player.Ultimate.canceled -= ctx => isUltimateInput = false;
+        controls.Player.Interact.performed -= ctx => isInteractInput = true;
+        controls.Player.Interact.canceled -= ctx => isInteractInput = false;
+
+        controls.Player.Heal.performed -= ctx => isHealInput = true;
+        controls.Player.Heal.canceled -= ctx => isHealInput = false;
     }
 
     private void Move(InputAction.CallbackContext ctx)

@@ -118,9 +118,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Ultimate"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""94222b30-02d6-4980-9531-e2eb8b7c542a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Heal"",
+                    ""type"": ""Button"",
+                    ""id"": ""cb0f4a42-bf6c-49e6-a2c7-e68c500eef3a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -395,11 +404,22 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""abb5c2e9-983d-49d4-8b9e-52de12dc2862"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5bb83de-591c-4397-af1f-7bb51617a939"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Ultimate"",
+                    ""action"": ""Heal"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -448,7 +468,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_ShootWater = m_Player.FindAction("ShootWater", throwIfNotFound: true);
         m_Player_ShootEarth = m_Player.FindAction("ShootEarth", throwIfNotFound: true);
         m_Player_Skill = m_Player.FindAction("Skill", throwIfNotFound: true);
-        m_Player_Ultimate = m_Player.FindAction("Ultimate", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Heal = m_Player.FindAction("Heal", throwIfNotFound: true);
         // Vehicle
         m_Vehicle = asset.FindActionMap("Vehicle", throwIfNotFound: true);
         m_Vehicle_Newaction = m_Vehicle.FindAction("New action", throwIfNotFound: true);
@@ -523,7 +544,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ShootWater;
     private readonly InputAction m_Player_ShootEarth;
     private readonly InputAction m_Player_Skill;
-    private readonly InputAction m_Player_Ultimate;
+    private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Heal;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -538,7 +560,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @ShootWater => m_Wrapper.m_Player_ShootWater;
         public InputAction @ShootEarth => m_Wrapper.m_Player_ShootEarth;
         public InputAction @Skill => m_Wrapper.m_Player_Skill;
-        public InputAction @Ultimate => m_Wrapper.m_Player_Ultimate;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Heal => m_Wrapper.m_Player_Heal;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -578,9 +601,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Skill.started += instance.OnSkill;
             @Skill.performed += instance.OnSkill;
             @Skill.canceled += instance.OnSkill;
-            @Ultimate.started += instance.OnUltimate;
-            @Ultimate.performed += instance.OnUltimate;
-            @Ultimate.canceled += instance.OnUltimate;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
+            @Heal.started += instance.OnHeal;
+            @Heal.performed += instance.OnHeal;
+            @Heal.canceled += instance.OnHeal;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -615,9 +641,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Skill.started -= instance.OnSkill;
             @Skill.performed -= instance.OnSkill;
             @Skill.canceled -= instance.OnSkill;
-            @Ultimate.started -= instance.OnUltimate;
-            @Ultimate.performed -= instance.OnUltimate;
-            @Ultimate.canceled -= instance.OnUltimate;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
+            @Heal.started -= instance.OnHeal;
+            @Heal.performed -= instance.OnHeal;
+            @Heal.canceled -= instance.OnHeal;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -693,7 +722,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnShootWater(InputAction.CallbackContext context);
         void OnShootEarth(InputAction.CallbackContext context);
         void OnSkill(InputAction.CallbackContext context);
-        void OnUltimate(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnHeal(InputAction.CallbackContext context);
     }
     public interface IVehicleActions
     {

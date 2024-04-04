@@ -4979,4 +4979,4 @@ MonoBehaviour:
   explosionRadius: 2
   explosionForce: 100
   particlesPrefab: {fileID: 7368629966905635090, guid: 4f9a196a1d144be4c8bbd57f426738c2, type: 3}
-  damage: 10
+  damage: 8

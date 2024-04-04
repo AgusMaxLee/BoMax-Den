@@ -5012,7 +5012,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa0911a47b199904eae0fed048183818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 10
 --- !u!54 &1829926505660236012
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5074,3 +5074,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spinSpeed: 500
+  rotationAxis: 2
