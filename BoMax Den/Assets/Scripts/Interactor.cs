@@ -12,7 +12,7 @@ public class Interactor : MonoBehaviour
 
     public Transform InteractorSource;
     public float InteractRange;
-    public float InteractionCooldown = 1f; // Cooldown time in seconds
+    public float InteractionCooldown = 0.5f; // Cooldown time in seconds
     public InteractUI interactUI;
 
     private bool interactableFound;

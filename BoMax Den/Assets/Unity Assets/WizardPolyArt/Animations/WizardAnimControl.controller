@@ -517,13 +517,13 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -2483521131031394299}
-    m_Position: {x: 950, y: -350, z: 0}
+    m_Position: {x: 660, y: -330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1537744608317269843}
-    m_Position: {x: 240, y: -580, z: 0}
+    m_Position: {x: 210, y: -500, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2795932646759607274}
-    m_Position: {x: 240, y: -640, z: 0}
+    m_Position: {x: 210, y: -560, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -9153076920885487569}
     m_Position: {x: 680, y: -450, z: 0}
@@ -532,34 +532,34 @@ AnimatorStateMachine:
     m_Position: {x: 680, y: -520, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6867105434569238232}
-    m_Position: {x: -290, y: -470, z: 0}
+    m_Position: {x: -150, y: -380, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8752200286847658390}
-    m_Position: {x: -290, y: -410, z: 0}
+    m_Position: {x: -150, y: -320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2438563171959023608}
     m_Position: {x: 1020, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7151233813052038917}
-    m_Position: {x: 1170, y: -280, z: 0}
+    m_Position: {x: 880, y: -260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 296792296658678745}
-    m_Position: {x: 0, y: -640, z: 0}
+    m_Position: {x: -30, y: -560, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1481201133251637846}
-    m_Position: {x: 0, y: -580, z: 0}
+    m_Position: {x: -30, y: -500, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7199631088558083704}
-    m_Position: {x: 950, y: -280, z: 0}
+    m_Position: {x: 660, y: -260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8884298918904389574}
-    m_Position: {x: 340, y: 10, z: 0}
+    m_Position: {x: 540, y: -110, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5960383015035318871}
-    m_Position: {x: -350, y: -120, z: 0}
+    m_Position: {x: 60, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7232490751216095307}
-    m_Position: {x: -290, y: -40, z: 0}
+    m_Position: {x: 280, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4153895560330062491}
     m_Position: {x: 460, y: -450, z: 0}
@@ -571,10 +571,10 @@ AnimatorStateMachine:
     m_Position: {x: -60, y: 350, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7008638021505954271}
-    m_Position: {x: -180, y: 130, z: 0}
+    m_Position: {x: -150, y: -200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5345082769522521195}
-    m_Position: {x: 60, y: 130, z: 0}
+    m_Position: {x: -150, y: -140, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -2193413709079337953}
@@ -596,8 +596,8 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_EntryPosition: {x: 290, y: 160, z: 0}
+  m_AnyStatePosition: {x: 270, y: -190, z: 0}
+  m_EntryPosition: {x: 630, y: 20, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: 8884298918904389574}
@@ -1091,91 +1091,91 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Running
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Shooting_Normal
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Shooting_Fire
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Shooting_Water
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Shooting_Earth
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Aiming_Normal
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Aiming_Fire
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Aiming_Water
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Aiming_Earth
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Skill_Fire
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Skill_Water
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Skill_Earth
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Interact
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: Heal
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -2931,7 +2931,7 @@ AnimatorStateTransition:
   m_TransitionOffset: 0
   m_ExitTime: 0.75
   m_HasExitTime: 0
-  m_HasFixedDuration: 1
+  m_HasFixedDuration: 0
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 0

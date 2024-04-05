@@ -174,7 +174,6 @@ public class PlayerController : MonoBehaviour
         {
             if (InputManager.isAimingInput)
             {
-                // Cast a ray from the aiming camera's position
                 Ray ray = new Ray(aimingCamera.transform.position, aimingCamera.transform.forward);
                 RaycastHit hit;
 
@@ -189,7 +188,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                // Use non-raycast logic
                 Vector3 direction = (projectileDirectionObject.transform.position - RockSpikeSpawnPoint.position).normalized;
 
                 GameObject bullet = Instantiate(fireBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
@@ -301,7 +299,7 @@ public class PlayerController : MonoBehaviour
                         Quaternion rotation = Quaternion.LookRotation(direction);
 
                         GameObject bullet = Instantiate(waterBullet, selectedSpawnPoint.position, rotation);
-                        playerStats.currentMana -= manaCostWaterSkill; // Deduct mana
+                        playerStats.currentMana -= manaCostWaterSkill;
                         bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
                         Destroy(bullet, 2f);
                     }
@@ -354,20 +352,41 @@ public class PlayerController : MonoBehaviour
     private void HandleSkillEarth()
     {
         timeSinceLastShot += Time.deltaTime;
+
         if (InputManager.isSkillInput && timeSinceLastShot >= 1)
         {
             if (playerStats.currentMana >= manaCostEarthSkill)
             {
+                if (InputManager.isAimingInput)
+                {
+                    Ray ray = new Ray(aimingCamera.transform.position, aimingCamera.transform.forward);
+                    RaycastHit hit;
 
-                Vector3 direction = (projectileDirectionObject.transform.position - waterSwordSpawnPoint2.position).normalized;
-                Quaternion rotation = Quaternion.LookRotation(direction);
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        Vector3 direction = (hit.point - waterSwordSpawnPoint2.position).normalized;
+                        Quaternion rotation = Quaternion.LookRotation(direction);
 
-                GameObject fireball = Instantiate(earthBall, waterSwordSpawnPoint2.position, rotation);
-                playerStats.currentMana -= manaCostEarthSkill;
-                fireball.GetComponent<Rigidbody>().AddForce(direction * 3000);
-                Destroy(fireball, 3f);
+                        GameObject fireball = Instantiate(earthBall, waterSwordSpawnPoint2.position, rotation);
+                        playerStats.currentMana -= manaCostEarthSkill;
+                        fireball.GetComponent<Rigidbody>().AddForce(direction * 3000);
+                        Destroy(fireball, 3f);
 
-                timeSinceLastShot = 0f;
+                        timeSinceLastShot = 0f;
+                    }
+                }
+                else
+                {
+                    Vector3 direction = (projectileDirectionObject.transform.position - waterSwordSpawnPoint2.position).normalized;
+                    Quaternion rotation = Quaternion.LookRotation(direction);
+
+                    GameObject fireball = Instantiate(earthBall, waterSwordSpawnPoint2.position, rotation);
+                    playerStats.currentMana -= manaCostEarthSkill;
+                    fireball.GetComponent<Rigidbody>().AddForce(direction * 3000);
+                    Destroy(fireball, 3f);
+
+                    timeSinceLastShot = 0f;
+                }
             }
             else
             {

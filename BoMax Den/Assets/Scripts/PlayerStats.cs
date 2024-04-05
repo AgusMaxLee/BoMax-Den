@@ -14,7 +14,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] public float baseMoveSpeed = 300f;
     [SerializeField] public float moveSpeed = 300f;
     [SerializeField] public int manaRegenRate = 10;
-    [SerializeField] public int healthRegenRate = 5;
+    [SerializeField] public int healthRegenRate = 10;
     [SerializeField] PlayerStatsUI playerStatsUI;
 
     private int baseMaxHealth = 100;
