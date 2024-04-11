@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Flamethrower : MonoBehaviour
 {
-    [SerializeField] private int damage = 5;
+    [SerializeField] private int damage = 1;
 
     private Rigidbody rb;
 

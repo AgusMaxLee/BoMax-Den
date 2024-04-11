@@ -96,9 +96,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Ultimate",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "94222b30-02d6-4980-9531-e2eb8b7c542a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Heal",
+                    "type": "Button",
+                    "id": "cb0f4a42-bf6c-49e6-a2c7-e68c500eef3a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -373,11 +382,22 @@
                 {
                     "name": "",
                     "id": "abb5c2e9-983d-49d4-8b9e-52de12dc2862",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5bb83de-591c-4397-af1f-7bb51617a939",
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Ultimate",
+                    "action": "Heal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

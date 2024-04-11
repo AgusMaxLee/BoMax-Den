@@ -21,6 +21,8 @@ public class PlayerAnimator : MonoBehaviour
         UpdateAimingAnimation();
         UpdateJumpAnimation();
         UpdateSprintAnimation();
+        UpdateInteractAnimation();
+        UpdateHealAnimation();
         UpdateShootAnimation();
         UpdateSkillAnimation();
     }
@@ -70,6 +72,17 @@ public class PlayerAnimator : MonoBehaviour
     {
         bool isSprinting = InputManager.isSprintingInput;
         animator.SetBool("Running", isSprinting && movementMagnitude > 0);
+    }
+
+    private void UpdateInteractAnimation()
+    {
+        bool isInteracting = InputManager.isInteractInput;
+        animator.SetBool("Interact", isInteracting);
+    }
+    private void UpdateHealAnimation()
+    {
+        bool isHealing = InputManager.isHealInput;
+        animator.SetBool("Heal", isHealing);
     }
 
     private void UpdateShootAnimation()

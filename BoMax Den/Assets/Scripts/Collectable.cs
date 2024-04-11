@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using static PlayerController;
 
-public class Collectable : MonoBehaviour
+
+public class Collectable : MonoBehaviour, Interactor.IInteractable
 {
     public PlayerController playerController;
     public PlayerState newState;
 
-    private void OnTriggerEnter(Collider other)
+    public void Interact()
     {
-        if (other.CompareTag("Player"))
-        {
-            // Switch player state when the collectible is grabbed
-            playerController.SwitchPlayerState(newState);
-
-            gameObject.SetActive(true); // Deactivate the collectible object
-        }
+        Debug.Log("is interacting");
+        // Request to switch player state when the collectible is grabbed
+        playerController.RequestStateSwitch(newState);
     }
 }
