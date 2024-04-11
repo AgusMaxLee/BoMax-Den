@@ -1,36 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour
 {
     public Transform[] patrolPoints;
     private int currentPatrolIndex = 0;
 
-    public float patrolSpeed = 3.5f;  // Ñ²ÂßËÙ¶È
-    public float chaseSpeed = 6.0f;   // ×·ÖðËÙ¶È
-    public float playerDetectionDistance = 10f;  // Íæ¼Ò¼ì²â¾àÀë
-    public float returnToPatrolDistance = 15f;  // Íæ¼ÒÔ¶Àëºó·µ»ØÑ²ÂßµÄ¾àÀë
+    public float patrolSpeed = 3.5f;
+    public float chaseSpeed = 6.0f;
+    public float playerDetectionDistance = 10f;
+    public float returnToPatrolDistance = 15f;
+    public float shootingDistance = 5f;
+    public float detectionRayWidth = 1f;
 
     public GameObject bulletPrefab;
     public Transform bulletSpawnPoint;
     public float bulletSpeed = 10f;
     public float bulletLifetime = 2f;
-    public float shootingDistance = 5f;
 
     private Transform playerTransform;
     private NavMeshAgent agent;
     private Vector3 originalPosition;
-
-    private List<GameObject> bulletPool = new List<GameObject>();
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         originalPosition = transform.position;
         SetDestination(patrolPoints[currentPatrolIndex].position);
-
-        InitializeBulletPool();
     }
 
     void Update()
@@ -52,11 +50,29 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, returnToPatrolDistance);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, playerDetectionDistance);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, shootingDistance);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, agent.stoppingDistance);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawRay(transform.position, transform.forward * playerDetectionDistance);
+    }
+
     void DetectPlayer()
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, playerDetectionDistance) && hit.collider.CompareTag("Player"))
+        if (Physics.SphereCast(transform.position, detectionRayWidth, transform.forward, out hit, playerDetectionDistance) && hit.collider.CompareTag("Player"))
         {
             playerTransform = hit.collider.transform;
         }
@@ -103,49 +119,20 @@ public class EnemyAI : MonoBehaviour
         agent.SetDestination(targetPosition);
     }
 
-    void InitializeBulletPool()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, Vector3.zero, Quaternion.identity);
-            bullet.SetActive(false);
-            bulletPool.Add(bullet);
-        }
-    }
-
     void ShootBullet()
     {
-        GameObject bullet = GetInactiveBullet();
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
 
-        if (bullet != null)
-        {
-            bullet.transform.position = bulletSpawnPoint.position;
-            bullet.transform.rotation = bulletSpawnPoint.rotation;
-            bullet.SetActive(true);
+        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+        bulletRb.velocity = bulletSpawnPoint.forward * bulletSpeed;
 
-            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-            bulletRb.velocity = bulletSpawnPoint.forward * bulletSpeed;
-
-            StartCoroutine(DeactivateBulletAfterTime(bullet, bulletLifetime));
-        }
+        StartCoroutine(DeactivateBulletAfterTime(bullet, bulletLifetime));
     }
 
-    GameObject GetInactiveBullet()
-    {
-        for (int i = 0; i < bulletPool.Count; i++)
-        {
-            if (!bulletPool[i].activeInHierarchy)
-            {
-                return bulletPool[i];
-            }
-        }
-
-        return null;
-    }
-
-    System.Collections.IEnumerator DeactivateBulletAfterTime(GameObject bullet, float time)
+    IEnumerator DeactivateBulletAfterTime(GameObject bullet, float time)
     {
         yield return new WaitForSeconds(time);
-        bullet.SetActive(false);
+        Destroy(bullet);
     }
 }
+

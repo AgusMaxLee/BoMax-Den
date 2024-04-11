@@ -16,9 +16,9 @@ public class Explosive : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Floor"))
+        if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Floor"))
         {
             Explode();
         }

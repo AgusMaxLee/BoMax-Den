@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
 
 public class PlayerStats : MonoBehaviour
 {
@@ -25,51 +23,33 @@ public class PlayerStats : MonoBehaviour
         get { return moveSpeed; }
         set { moveSpeed = value; }
     }
+
     public UnityEvent<int> onTakeDamage;
     public UnityEvent onDeath;
 
-    private bool isTakingDamage = false;
     private bool isDead = false;
+    private bool isTakingDamage = false; // Added variable declaration
 
-    void Start()
+    private void Start()
     {
         currentHealth = maxHealth;
         currentMana = maxMana;
         moveSpeed = baseMoveSpeed;
     }
 
-    void Update()
+    private void Update()
     {
         if (!InputManager.isSkillInput)
         {
             RegenerateMana();
         }
-        //RegenerateHealth();
 
         if (isDead)
         {
             // Handle death logic
         }
+    }
 
-        if (isTakingDamage)
-        {
-            // Handle damage animation or effects
-        }
-    }
-    /*
-    private void RegenerateHealth()
-    {
-        currentHealth += healthRegenRate * Time.deltaTime;
-        if (currentHealth > maxHealth)
-        {
-            currentHealth = maxHealth;
-        }
-        if (currentHealth < 0)
-        {
-            currentHealth = 0;
-        }
-    }
-    */
     private void RegenerateMana()
     {
         currentMana += manaRegenRate * Time.deltaTime;
@@ -85,21 +65,29 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        if (!isDead && !isTakingDamage)
+        if (!isDead)
         {
             currentHealth -= amount;
-            currentMana -= amount;
             onTakeDamage?.Invoke(amount);
+            animator.SetTrigger("TakeDamage");
             Debug.Log("Player took damage. Current Health: " + currentHealth);
-            Debug.Log("Player mana reduced. Current Mana: " + currentMana);
-
-            isTakingDamage = true;
 
             if (currentHealth <= 0)
             {
                 Die();
             }
+            else
+            {
+                StartCoroutine(TakeDamageCoroutine());
+            }
         }
+    }
+
+    private IEnumerator TakeDamageCoroutine()
+    {
+        isTakingDamage = true;
+        yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
+        isTakingDamage = false;
     }
 
     private void Die()

@@ -131,7 +131,7 @@ public class PlayerAnimator : MonoBehaviour
         currentPlayerState = newState;
     }
 
-    private void PlayTakeDamageAnimation(int amount)
+    private void PlayTakeDamageAnimation()
     {
         animator.SetTrigger("TakeDamage");
     }

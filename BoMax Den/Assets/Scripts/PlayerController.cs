@@ -113,7 +113,9 @@ public class PlayerController : MonoBehaviour
         float currentMoveSpeed = isSprinting ? playerStats.MoveSpeed * 2 : playerStats.MoveSpeed;
 
         Vector3 movement = movementDirection * (currentMoveSpeed * Time.deltaTime);
+        movement.y = rb.velocity.y;
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+        //rb.MovePosition(rb.position + movement);
 
         if (movementDirection != Vector3.zero && !InputManager.isAimingInput)
         {
