@@ -18,17 +18,18 @@ namespace UnityStandardAssets.Effects
             m_ParticleSystem = GetComponent<ParticleSystem>();
         }
 
-
+        [Obsolete]
         private void OnParticleCollision(GameObject other)
         {
-            int safeLength = m_ParticleSystem.GetSafeCollisionEventSize();
+            ParticleSystem m_ParticleSystem1 = m_ParticleSystem;
+            int safeLength = m_ParticleSystem1.GetSafeCollisionEventSize();
 
             if (m_CollisionEvents.Length < safeLength)
             {
                 m_CollisionEvents = new ParticleCollisionEvent[safeLength];
             }
 
-            int numCollisionEvents = m_ParticleSystem.GetCollisionEvents(other, m_CollisionEvents);
+            int numCollisionEvents = m_ParticleSystem1.GetCollisionEvents(other, m_CollisionEvents);
             int i = 0;
 
             while (i < numCollisionEvents)
@@ -40,11 +41,19 @@ namespace UnityStandardAssets.Effects
 
                 var col = m_CollisionEvents[i].colliderComponent;
 
-                if (col.attachedRigidbody != null)
+                // Ensure col is of type Collider before accessing attachedRigidbody
+                Collider collider = col as Collider;
+                if (collider != null && collider.attachedRigidbody != null)
                 {
                     Vector3 vel = m_CollisionEvents[i].velocity;
-                    col.attachedRigidbody?.AddForce(vel * force, ForceMode.Impulse);
+                    collider.attachedRigidbody.AddForce(vel * force, ForceMode.Impulse);
                 }
+
+                //if (col.attachedRigidbody != null)
+                //{
+                //    Vector3 vel = m_CollisionEvents[i].velocity;
+                //    col.attachedRigidbody?.AddForce(vel * force, ForceMode.Impulse);
+                //}
 
                 other.SendMessage("Extinguish", SendMessageOptions.DontRequireReceiver);
                 i++;
