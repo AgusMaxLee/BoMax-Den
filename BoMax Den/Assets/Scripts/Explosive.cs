@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Explosive : MonoBehaviour
 {
-    [SerializeField] private float triggerForce = 0.5f;
+    [SerializeField] private float triggerForce = 0.5f; 
     [SerializeField] private float explosionRadius = 5;
     [SerializeField] private float explosionForce = 500;
     [SerializeField] private GameObject particlesPrefab;

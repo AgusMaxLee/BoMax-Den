@@ -1,151 +1,83 @@
 using UnityEngine;
-using UnityEngine.AI;
-using System.Collections.Generic;
+using UnityEngine.AI; // 导入用于访问导航系统的命名空间
 
 public class EnemyAI : MonoBehaviour
 {
-    public Transform[] patrolPoints;
-    private int currentPatrolIndex = 0;
+    public Transform[] waypoints;
+    public float patrolSpeed = 2f;
+    public float chaseSpeed = 5f;
+    public float chaseDistance = 10f;
+    public float explosionDistance = 0.5f;
+    public float damage = 20f;
+    public float loseInterestDistance = 15f;
 
-    public float patrolSpeed = 3.5f;  // 巡逻速度
-    public float chaseSpeed = 6.0f;   // 追逐速度
-    public float playerDetectionDistance = 10f;  // 玩家检测距离
-    public float returnToPatrolDistance = 15f;  // 玩家远离后返回巡逻的距离
-
-    public GameObject bulletPrefab;
-    public Transform bulletSpawnPoint;
-    public float bulletSpeed = 10f;
-    public float bulletLifetime = 2f;
-    public float shootingDistance = 5f;
-
-    private Transform playerTransform;
+    private Transform player;
     private NavMeshAgent agent;
-    private Vector3 originalPosition;
-
-    private List<GameObject> bulletPool = new List<GameObject>();
+    private int waypointIndex = 0;
+    private bool isChasing = false;
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        originalPosition = transform.position;
-        SetDestination(patrolPoints[currentPatrolIndex].position);
-
-        InitializeBulletPool();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        agent = GetComponent<NavMeshAgent>(); // 获取NavMeshAgent组件
+        agent.autoBraking = false; // 防止接近目标时减速
+        GoToNextWaypoint();
     }
 
     void Update()
     {
-        DetectPlayer();
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        if (playerTransform != null)
+        if (isChasing)
         {
-            ChasePlayer();
-
-            if (Vector3.Distance(transform.position, playerTransform.position) <= shootingDistance)
+            if (distanceToPlayer > loseInterestDistance)
             {
-                ShootBullet();
+                isChasing = false;
+                GoToNextWaypoint();
+            }
+            else if (distanceToPlayer <= explosionDistance)
+            {
+                Explode();
+            }
+            else
+            {
+                agent.SetDestination(player.position);
+                agent.speed = chaseSpeed;
             }
         }
         else
         {
-            Patrol();
-        }
-    }
-
-    void DetectPlayer()
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, playerDetectionDistance) && hit.collider.CompareTag("Player"))
-        {
-            playerTransform = hit.collider.transform;
-        }
-        else
-        {
-            playerTransform = null;
-        }
-    }
-
-    void ChasePlayer()
-    {
-        agent.destination = playerTransform.position;
-        agent.speed = chaseSpeed;
-
-        if (Vector3.Distance(transform.position, playerTransform.position) > returnToPatrolDistance)
-        {
-            playerTransform = null;
-            agent.speed = patrolSpeed;
-            ReturnToPatrol();
-        }
-    }
-
-    void Patrol()
-    {
-        if (agent.remainingDistance < 0.5f)
-        {
-            SetNextPatrolPoint();
-        }
-    }
-
-    void ReturnToPatrol()
-    {
-        SetDestination(originalPosition);
-    }
-
-    void SetNextPatrolPoint()
-    {
-        currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
-        SetDestination(patrolPoints[currentPatrolIndex].position);
-    }
-
-    void SetDestination(Vector3 targetPosition)
-    {
-        agent.SetDestination(targetPosition);
-    }
-
-    void InitializeBulletPool()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            GameObject bullet = Instantiate(bulletPrefab, Vector3.zero, Quaternion.identity);
-            bullet.SetActive(false);
-            bulletPool.Add(bullet);
-        }
-    }
-
-    void ShootBullet()
-    {
-        GameObject bullet = GetInactiveBullet();
-
-        if (bullet != null)
-        {
-            bullet.transform.position = bulletSpawnPoint.position;
-            bullet.transform.rotation = bulletSpawnPoint.rotation;
-            bullet.SetActive(true);
-
-            Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-            bulletRb.velocity = bulletSpawnPoint.forward * bulletSpeed;
-
-            StartCoroutine(DeactivateBulletAfterTime(bullet, bulletLifetime));
-        }
-    }
-
-    GameObject GetInactiveBullet()
-    {
-        for (int i = 0; i < bulletPool.Count; i++)
-        {
-            if (!bulletPool[i].activeInHierarchy)
+            if (!agent.pathPending && agent.remainingDistance < 0.5f)
             {
-                return bulletPool[i];
+                GoToNextWaypoint();
+            }
+
+            if (distanceToPlayer <= chaseDistance && IsPlayerInFront())
+            {
+                isChasing = true;
             }
         }
-
-        return null;
     }
 
-    System.Collections.IEnumerator DeactivateBulletAfterTime(GameObject bullet, float time)
+    void GoToNextWaypoint()
     {
-        yield return new WaitForSeconds(time);
-        bullet.SetActive(false);
+        if (waypoints.Length == 0)
+            return;
+
+        agent.destination = waypoints[waypointIndex].position;
+        agent.speed = patrolSpeed;
+        waypointIndex = (waypointIndex + 1) % waypoints.Length;
+    }
+
+    bool IsPlayerInFront()
+    {
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        return Vector3.Dot(directionToPlayer, transform.forward) > 0;
+    }
+
+    void Explode()
+    {
+        Debug.Log($"BOOM! Caused {damage} damage to the player.");
+        Destroy(gameObject);
     }
 }

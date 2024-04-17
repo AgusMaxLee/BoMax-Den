@@ -45,6 +45,11 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    public bool IsDead
+    {
+        get { return currentHealth <= 0; }
+    }
+
     public void TakeDamage(int amount)
     {
         if (!isDead && !isRecovering)

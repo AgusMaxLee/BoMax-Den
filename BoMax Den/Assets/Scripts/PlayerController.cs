@@ -70,6 +70,8 @@ public class PlayerController : MonoBehaviour
     private const float FireSpeed = 400f;
     private const float WaterSpeed = 500f;
     private const float EarthSpeed = 350f;
+
+    private bool isFrozen = false;
     public enum PlayerState
     {
         Normal,
@@ -99,6 +101,8 @@ public class PlayerController : MonoBehaviour
     //Basic Player Functions
     private void HandleMovement()
     {
+        if (isFrozen) return;  // 如果玩家被冻结，则不处理移动
+
         float horizontalInput = InputManager.movementInput.x;
         float verticalInput = InputManager.movementInput.y;
         bool isSprinting = InputManager.isSprintingInput;
@@ -120,6 +124,21 @@ public class PlayerController : MonoBehaviour
             TurnTowardsMovementDirection(movementDirection);
         }
     }
+
+
+
+    public void FreezePlayer(float duration)
+    {
+        StartCoroutine(FreezeDuration(duration));
+    }
+
+    private IEnumerator FreezeDuration(float duration)
+    {
+        isFrozen = true;  // 开始冻结
+        yield return new WaitForSeconds(duration);  // 等待指定时间
+        isFrozen = false;  // 结束冻结
+    }
+
     private void HandleJump()
     {
         if (InputManager.isJumpInput && canJump)

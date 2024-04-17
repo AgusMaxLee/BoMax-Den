@@ -6,18 +6,20 @@ TagManager:
   tags:
   - Floor
   - Enemy
+  - bullet
+  - Obstacle
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
   - Post Processing
-  - 
-  - 
-  - 
-  - 
+  - bullet
+  - Ground
+  - Boss
+  - Enemy
   - 
   - 
   - 
