@@ -8,9 +8,18 @@ public class Sword : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+        if (enemyHealth != null)
         {
-            other.GetComponent<EnemyHealth>().TakeDamage(damage);
+            enemyHealth.TakeDamage(damage);
+        }
+        else
+        {
+            DummyHealth dummyHealth = other.GetComponent<DummyHealth>();
+            if (dummyHealth != null)
+            {
+                dummyHealth.TakeDamage(damage);
+            }
         }
     }
 }

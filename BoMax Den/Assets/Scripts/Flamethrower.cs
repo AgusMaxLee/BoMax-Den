@@ -14,9 +14,21 @@ public class Flamethrower : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            other.GetComponent<EnemyHealth>().TakeDamage(damage);
+            EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+            }
+            else
+            {
+                DummyHealth dummyHealth = other.gameObject.GetComponent<DummyHealth>();
+                if (dummyHealth != null)
+                {
+                    dummyHealth.TakeDamage(damage);
+                }
+            }
         }
     }
 

@@ -1,9 +1,12 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerStats : MonoBehaviour
 {
+    PlayerControls controls;
     [SerializeField] private Animator animator;
     [SerializeField] public float currentHealth;
     [SerializeField] public float maxHealth = 100;
@@ -29,7 +32,10 @@ public class PlayerStats : MonoBehaviour
 
     private bool isDead = false;
     private bool isTakingDamage = false; // Added variable declaration
-
+    private void Awake()
+    {
+        controls = new PlayerControls();
+    }
     private void Start()
     {
         currentHealth = maxHealth;
@@ -86,15 +92,27 @@ public class PlayerStats : MonoBehaviour
     private IEnumerator TakeDamageCoroutine()
     {
         isTakingDamage = true;
-        yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
+        yield return new WaitForSeconds(0.5f);
         isTakingDamage = false;
     }
 
     private void Die()
     {
+        Debug.Log("dead");
         animator.SetTrigger("Die");
         isDead = true;
         onDeath?.Invoke();
+        controls.Player.Disable();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        StartCoroutine(SwitchToMenuCoroutine(0.8f));
+    }
+
+    private IEnumerator SwitchToMenuCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("Menu");
     }
 
     public void SetStateValues(float hpMultiplier, float manaMultiplier, float speedMultiplier)

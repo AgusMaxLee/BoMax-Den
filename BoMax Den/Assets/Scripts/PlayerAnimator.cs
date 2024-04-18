@@ -130,14 +130,4 @@ public class PlayerAnimator : MonoBehaviour
     {
         currentPlayerState = newState;
     }
-
-    private void PlayTakeDamageAnimation()
-    {
-        animator.SetTrigger("TakeDamage");
-    }
-
-    private void PlayDeathAnimation()
-    {
-        animator.SetTrigger("Die");
-    } 
 }  

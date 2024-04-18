@@ -14,17 +14,5 @@ public class Apple : MonoBehaviour, Interactor.IInteractable
         AppleManager.instance.CollectApple();
         Destroy(gameObject);
     }
-
-    private void UpdateAppleCounterDisplay()
-    {
-        if (appleCounterDisplay != null)
-        {
-            Text textComponent = appleCounterDisplay.GetComponent<Text>();
-            if (textComponent != null)
-            {
-                textComponent.text = AppleManager.instance.GetAppleCount().ToString();
-            }
-        }
-    }
 }
 

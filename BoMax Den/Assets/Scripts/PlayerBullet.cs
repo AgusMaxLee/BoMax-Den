@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using static EnemyHealth;
+using static DummyHealth;
 
 public class PlayerBullet : MonoBehaviour
 {
@@ -17,10 +17,24 @@ public class PlayerBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check if the collider's game object is tagged as "Enemy"
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<EnemyHealth>().TakeDamage(damage);
-            Destroy(this.gameObject);
+            EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(damage);
+            }
+            else
+            {
+                DummyHealth dummyHealth = other.gameObject.GetComponent<DummyHealth>();
+                if (dummyHealth != null)
+                {
+                    dummyHealth.TakeDamage(damage);
+                }
+            }
+
+            Destroy(gameObject);
         }
     }
 }

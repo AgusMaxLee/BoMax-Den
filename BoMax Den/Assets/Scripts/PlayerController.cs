@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
     private int currentSpawnIndex = 0;
     private bool inSkillMode = false;
     private bool switchStateRequested = false;
+    private bool isFrozen = false;
     public enum PlayerState
     {
         Normal,
@@ -93,6 +94,8 @@ public class PlayerController : MonoBehaviour
     // Basic Player Functions
     private void HandleMovement()
     {
+        if (isFrozen) return;
+
         float horizontalInput = InputManager.movementInput.x;
         float verticalInput = InputManager.movementInput.y;
         bool isSprinting = InputManager.isSprintingInput;
@@ -115,12 +118,21 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = movementDirection * (currentMoveSpeed * Time.deltaTime);
         movement.y = rb.velocity.y;
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
-        //rb.MovePosition(rb.position + movement);
 
         if (movementDirection != Vector3.zero && !InputManager.isAimingInput)
         {
             TurnTowardsMovementDirection(movementDirection);
         }
+    }
+    public void FreezePlayer(float duration)
+    {
+        StartCoroutine(FreezeDuration(duration));
+    }
+    private IEnumerator FreezeDuration(float duration)
+    {
+        isFrozen = true; 
+        yield return new WaitForSeconds(duration);
+        isFrozen = false;
     }
     private void HandleJump()
     {
@@ -185,7 +197,7 @@ public class PlayerController : MonoBehaviour
 
                     GameObject bullet = Instantiate(fireBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                     bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
-                    Destroy(bullet, 2f);
+                    Destroy(bullet, 1f);
                 }
             }
             else
@@ -194,7 +206,7 @@ public class PlayerController : MonoBehaviour
 
                 GameObject bullet = Instantiate(fireBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                 bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
-                Destroy(bullet, 2f);
+                Destroy(bullet, 0.5f);
             }
 
             timeSinceLastShot = 0f;
@@ -261,7 +273,7 @@ public class PlayerController : MonoBehaviour
 
                 GameObject bullet = Instantiate(waterBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                 bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
-                Destroy(bullet, 2f);
+                Destroy(bullet, 0.7f);
             }
 
             timeSinceLastShot = 0f;
@@ -303,7 +315,7 @@ public class PlayerController : MonoBehaviour
                         GameObject bullet = Instantiate(waterBullet, selectedSpawnPoint.position, rotation);
                         playerStats.currentMana -= manaCostWaterSkill;
                         bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
-                        Destroy(bullet, 2f);
+                        Destroy(bullet, 0.7f);
                     }
 
                     currentSpawnIndex = (currentSpawnIndex + 1) % 3;
@@ -335,7 +347,7 @@ public class PlayerController : MonoBehaviour
 
                     GameObject bullet = Instantiate(earthBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                     bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
-                    Destroy(bullet, 2f);
+                    Destroy(bullet, 1f);
                 }
             }
             else
