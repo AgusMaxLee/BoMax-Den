@@ -1,9 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
-using UnityEngine.InputSystem.LowLevel;
-using System.Text;
 
 public class PlayerController : MonoBehaviour
 {
@@ -60,6 +56,7 @@ public class PlayerController : MonoBehaviour
     private int currentSpawnIndex = 0;
     private bool inSkillMode = false;
     private bool switchStateRequested = false;
+    private bool isFrozen = false;
     public enum PlayerState
     {
         Normal,
@@ -93,15 +90,11 @@ public class PlayerController : MonoBehaviour
     // Basic Player Functions
     private void HandleMovement()
     {
+        if (isFrozen) return;  // 如果玩家被冻结，则不处理移动
+
         float horizontalInput = InputManager.movementInput.x;
         float verticalInput = InputManager.movementInput.y;
         bool isSprinting = InputManager.isSprintingInput;
-
-
-        if (InputManager.isAimingInput)
-        {
-            isSprinting = false;
-        }
 
         Vector3 forwardDirection = Camera.main.transform.forward;
         forwardDirection.y = 0;
@@ -113,15 +106,26 @@ public class PlayerController : MonoBehaviour
         float currentMoveSpeed = isSprinting ? playerStats.MoveSpeed * 2 : playerStats.MoveSpeed;
 
         Vector3 movement = movementDirection * (currentMoveSpeed * Time.deltaTime);
-        movement.y = rb.velocity.y;
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
-        //rb.MovePosition(rb.position + movement);
 
         if (movementDirection != Vector3.zero && !InputManager.isAimingInput)
         {
             TurnTowardsMovementDirection(movementDirection);
         }
     }
+
+    public void FreezePlayer(float duration)
+    {
+        StartCoroutine(FreezeDuration(duration));
+    }
+
+    private IEnumerator FreezeDuration(float duration)
+    {
+        isFrozen = true;  // 开始冻结
+        yield return new WaitForSeconds(duration);  // 等待指定时间
+        isFrozen = false;  // 结束冻结
+    }
+
     private void HandleJump()
     {
         if (InputManager.isJumpInput && canJump)
