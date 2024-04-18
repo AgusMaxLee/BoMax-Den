@@ -1,24 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
     [SerializeField] private int currentHealth, maxHealth = 100;
     public UnityEvent<int> onTakeDamage;
 
-    [SerializeField] private float hitAnimationDuration = 1f;
-    private bool isTakingDamage = false;
-    private bool isDead = false;
-    private bool isRecovering = false;
-
-    [SerializeField] FloatingHealthBar healthBar;
+    [SerializeField] private FloatingHealthBar healthBar;
+    private Animator animator;
+    private bool isHurtCooldown = false;
+    public float hurtCooldownTime = 1f; // Cooldown time for the "hurt" animation in seconds
 
     private void Awake()
     {
         healthBar = GetComponentInChildren<FloatingHealthBar>();
+        animator = GetComponent<Animator>();
     }
 
     public void Start()
@@ -27,67 +23,38 @@ public class EnemyHealth : MonoBehaviour
         healthBar.UpdateHealthBar(currentHealth, maxHealth);
     }
 
-    void Update()
-    {
-        if (isRecovering)
-        {
-            hitAnimationDuration -= Time.deltaTime;
-            if (hitAnimationDuration <= 0f)
-            {
-                currentHealth = maxHealth;
-                healthBar.UpdateHealthBar(currentHealth, maxHealth);
-                isRecovering = false;
-                animator.SetBool("Recover", true); // Transition to recover animation
-                animator.SetBool("Dead", false); // Reset dead animation state
-                isTakingDamage = false; // Reset taking damage flag
-                isDead = false; // Reset dead flag
-            }
-        }
-    }
-
     public void TakeDamage(int amount)
     {
-        if (!isDead && !isRecovering)
+        if (currentHealth > 0 && !isHurtCooldown) // Check if not in cooldown
         {
             currentHealth -= amount;
             onTakeDamage?.Invoke(amount);
             healthBar.UpdateHealthBar(currentHealth, maxHealth);
             Debug.Log("Enemy took damage. Current Health: " + currentHealth);
 
-            animator.SetBool("Hit", true);
-
-            // Invoke a method to reset "Hit" after 2 seconds
-            Invoke("ResetHitParameter", 0.5f);
-            
             if (currentHealth <= 0)
             {
-                isDead = true;
-                animator.SetBool("Dead", true);
-                StartRecovery();
+                Die();
             }
             else
             {
-                isTakingDamage = true; // Set taking damage flag
+                // Set the "IsHurt" parameter to true for the duration of the "hurt" animation
+                animator.SetBool("isHurt", true);
+                isHurtCooldown = true; // Start the cooldown
+                Invoke(nameof(ResetHurtCooldown), hurtCooldownTime); // Reset the cooldown after the specified time
             }
         }
     }
 
-    private void ResetHitParameter()
+    private void ResetHurtCooldown()
     {
-        animator.SetBool("Hit", false);
+        animator.SetBool("isHurt", false);
+        isHurtCooldown = false; // Reset the cooldown flag
     }
 
-    private void StartRecovery()
+    private void Die()
     {
-        isRecovering = true;
-        hitAnimationDuration = 2f; // Set recovery duration
-        animator.SetBool("Recover", false); // Ensure Recover parameter is set to false initially
-    }
-
-    // Called by animation event when the recovery animation finishes
-    public void OnRecoveryComplete()
-    {
-        animator.SetBool("Recover", true); // Transition back to idle animation
+        // Additional actions when the enemy dies
+        Destroy(gameObject);
     }
 }
-

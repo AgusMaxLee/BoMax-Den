@@ -9,10 +9,16 @@ public class PlayerStatsUI : MonoBehaviour
     public Slider manaSlider;
     public PlayerStats playerStats;
     public PlayerController playerController;
+    public Image stateImage;
+    public Sprite normalSprite;
+    public Sprite fireSprite;
+    public Sprite waterSprite;
+    public Sprite earthSprite;
 
     void Update()
     {
         UpdateSliders();
+        UpdateStateImage();
     }
 
     void UpdateSliders()
@@ -48,6 +54,26 @@ public class PlayerStatsUI : MonoBehaviour
                 break;
         }
     }
+
+    void UpdateStateImage()
+    {
+        switch (playerController.currentState)
+        {
+            case PlayerController.PlayerState.Normal:
+                stateImage.sprite = normalSprite;
+                break;
+            case PlayerController.PlayerState.Fire:
+                stateImage.sprite = fireSprite;
+                break;
+            case PlayerController.PlayerState.Water:
+                stateImage.sprite = waterSprite;
+                break;
+            case PlayerController.PlayerState.Earth:
+                stateImage.sprite = earthSprite;
+                break;
+        }
+    }
+
     public void UpdateMaxValues(float maxHealth, float maxMana)
     {
         hpSlider.maxValue = maxHealth;
