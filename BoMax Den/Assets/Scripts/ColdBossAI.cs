@@ -85,7 +85,7 @@ public class ColdBossAI : MonoBehaviour
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             if (bulletRb != null)
             {
-                bulletRb.AddForce(directionToPlayer * 60, ForceMode.Impulse);
+                bulletRb.AddForce(directionToPlayer * 100, ForceMode.Impulse);
             }
             else
             {

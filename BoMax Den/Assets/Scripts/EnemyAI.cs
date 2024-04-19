@@ -12,14 +12,15 @@ public class EnemyAI : MonoBehaviour
     public float loseInterestDistance = 15f;
     public GameObject deathParticles;
 
-    private Transform player;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] private Transform playerTransform;
+
     private NavMeshAgent agent;
     private int waypointIndex = 0;
     private bool isChasing = false;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
         GoToNextWaypoint();
@@ -27,7 +28,13 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("Player transform not assigned in EnemyAI script.");
+            return;
+        }
+
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
         if (isChasing)
         {
@@ -42,7 +49,7 @@ public class EnemyAI : MonoBehaviour
             }
             else
             {
-                agent.SetDestination(player.position);
+                agent.SetDestination(playerTransform.position);
                 agent.speed = chaseSpeed;
             }
         }
@@ -72,13 +79,16 @@ public class EnemyAI : MonoBehaviour
 
     bool IsPlayerInFront()
     {
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        if (playerTransform == null)
+            return false;
+
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
         return Vector3.Dot(directionToPlayer, transform.forward) > 0;
     }
 
     void Explode()
     {
-        PlayerStats playerStats = player.GetComponent<PlayerStats>();
+        PlayerStats playerStats = playerTransform.GetComponent<PlayerStats>();
 
         if (playerStats != null)
         {
@@ -90,7 +100,7 @@ public class EnemyAI : MonoBehaviour
             GameObject particles = Instantiate(deathParticles, transform.position, Quaternion.identity);
             Destroy(particles, 2f);
         }
-
+        AudioManager.Instance.PlaySound(deathSound);
         Destroy(gameObject);
     }
 }

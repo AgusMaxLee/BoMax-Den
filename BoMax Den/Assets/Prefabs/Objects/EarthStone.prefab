@@ -121,6 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   newState: 3
+  pickupSound: {fileID: 8300000, guid: c5ad1fdd6021af444b08320cffe08290, type: 3}
 --- !u!114 &2059481319385585581
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
+using UnityEngine.InputSystem.LowLevel;
+using System.Text;
 
 public class PlayerController : MonoBehaviour
 {
@@ -47,6 +51,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject waterStaff;
     [SerializeField] private GameObject earthStaff;
 
+    [Header("Player Sounds")]
+    [SerializeField] private AudioClip normalSwordSound;
+    [SerializeField] private AudioClip normalFireSound;
+    [SerializeField] private AudioClip skillFireSound;
+    [SerializeField] private AudioClip normalWaterSound;
+    [SerializeField] private AudioClip skillWaterSound;
+    [SerializeField] private AudioClip normalEarthSound;
+    [SerializeField] private AudioClip skillEarthSound;
+
+
+
     private Rigidbody rb;
     private Renderer playerRenderer;
     private bool canJump = true;
@@ -57,6 +72,7 @@ public class PlayerController : MonoBehaviour
     private bool inSkillMode = false;
     private bool switchStateRequested = false;
     private bool isFrozen = false;
+    public AudioClip playerdamage_off; // el sonido del jugador cuando hace off!
     public enum PlayerState
     {
         Normal,
@@ -90,15 +106,16 @@ public class PlayerController : MonoBehaviour
     // Basic Player Functions
     private void HandleMovement()
     {
-<<<<<<< HEAD
-        if (isFrozen) return;  // 如果玩家被冻结，则不处理移动
-=======
         if (isFrozen) return;
->>>>>>> 3fdee171aa9f55d771e928deac42310b3179b6f5
 
         float horizontalInput = InputManager.movementInput.x;
         float verticalInput = InputManager.movementInput.y;
         bool isSprinting = InputManager.isSprintingInput;
+
+        if (InputManager.isAimingInput)
+        {
+            isSprinting = false;
+        }
 
         Vector3 forwardDirection = Camera.main.transform.forward;
         forwardDirection.y = 0;
@@ -110,6 +127,7 @@ public class PlayerController : MonoBehaviour
         float currentMoveSpeed = isSprinting ? playerStats.MoveSpeed * 2 : playerStats.MoveSpeed;
 
         Vector3 movement = movementDirection * (currentMoveSpeed * Time.deltaTime);
+        movement.y = rb.velocity.y;
         rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
 
         if (movementDirection != Vector3.zero && !InputManager.isAimingInput)
@@ -117,31 +135,17 @@ public class PlayerController : MonoBehaviour
             TurnTowardsMovementDirection(movementDirection);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 3fdee171aa9f55d771e928deac42310b3179b6f5
     public void FreezePlayer(float duration)
     {
         StartCoroutine(FreezeDuration(duration));
     }
-<<<<<<< HEAD
-
     private IEnumerator FreezeDuration(float duration)
     {
-        isFrozen = true;  // 开始冻结
-        yield return new WaitForSeconds(duration);  // 等待指定时间
-        isFrozen = false;  // 结束冻结
-    }
-
-=======
-    private IEnumerator FreezeDuration(float duration)
-    {
-        isFrozen = true; 
+        isFrozen = true;
         yield return new WaitForSeconds(duration);
         isFrozen = false;
     }
->>>>>>> 3fdee171aa9f55d771e928deac42310b3179b6f5
     private void HandleJump()
     {
         if (InputManager.isJumpInput && canJump)
@@ -176,20 +180,37 @@ public class PlayerController : MonoBehaviour
     }
 
     // Normal State Functions
+    private float swingTimer = 0f;
+    private bool isSwinging = false;
     private void HandleNormalAttack()
     {
-        if (InputManager.isSwingingInput)
+        if (InputManager.isSwingingInput && !isSwinging)
         {
             swordCollider.SetActive(true);
+            AudioManager.Instance.PlaySound(normalSwordSound);
+            isSwinging = true;
+            swingTimer = 0.7f; // Set the timer to one second
         }
         else
         {
             swordCollider.SetActive(false);
         }
+
+        // Update the timer if swinging is active
+        if (isSwinging)
+        {
+            swingTimer -= Time.deltaTime;
+            if (swingTimer <= 0f)
+            {
+                isSwinging = false;
+            }
+        }
     }
+
     // Fire State Functions
     private void HandleShootingFire()
     {
+        
         timeSinceLastShot += Time.deltaTime;
 
         if (!inSkillMode && InputManager.isShootingFireInput && timeSinceLastShot >= 0.5)
@@ -204,6 +225,7 @@ public class PlayerController : MonoBehaviour
                     Vector3 direction = (hit.point - RockSpikeSpawnPoint.position).normalized;
 
                     GameObject bullet = Instantiate(fireBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
+                    AudioManager.Instance.PlaySound(normalFireSound);
                     bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
                     Destroy(bullet, 1f);
                 }
@@ -213,12 +235,14 @@ public class PlayerController : MonoBehaviour
                 Vector3 direction = (projectileDirectionObject.transform.position - RockSpikeSpawnPoint.position).normalized;
 
                 GameObject bullet = Instantiate(fireBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
+                AudioManager.Instance.PlaySound(normalFireSound);
                 bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
                 Destroy(bullet, 0.5f);
             }
 
             timeSinceLastShot = 0f;
         }
+        
     }
     private void HandleSkillFire()
     {
@@ -232,6 +256,7 @@ public class PlayerController : MonoBehaviour
                     flamethrowerParticles.Play();
                     fireCollider.SetActive(true);
                     playerStats.currentMana -= manaCostFireSkill;
+
                 }
                 else
                 {
@@ -251,6 +276,7 @@ public class PlayerController : MonoBehaviour
             inSkillMode = false;
             flamethrowerParticles.Stop();
             fireCollider.SetActive(false);
+
         }
     }
 
@@ -269,6 +295,7 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     Vector3 direction = (hit.point - RockSpikeSpawnPoint.position).normalized;
+                    AudioManager.Instance.PlaySound(normalWaterSound);
 
                     GameObject bullet = Instantiate(waterBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                     bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
@@ -278,6 +305,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 Vector3 direction = (projectileDirectionObject.transform.position - RockSpikeSpawnPoint.position).normalized;
+                AudioManager.Instance.PlaySound(normalWaterSound);
 
                 GameObject bullet = Instantiate(waterBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                 bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
@@ -319,6 +347,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Vector3 direction = (hit.point - selectedSpawnPoint.position).normalized;
                         Quaternion rotation = Quaternion.LookRotation(direction);
+                        AudioManager.Instance.PlaySound(skillWaterSound);
 
                         GameObject bullet = Instantiate(waterBullet, selectedSpawnPoint.position, rotation);
                         playerStats.currentMana -= manaCostWaterSkill;
@@ -352,6 +381,7 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     Vector3 direction = (hit.point - RockSpikeSpawnPoint.position).normalized;
+                    AudioManager.Instance.PlaySound(normalEarthSound);
 
                     GameObject bullet = Instantiate(earthBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                     bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
@@ -362,6 +392,7 @@ public class PlayerController : MonoBehaviour
             {
                 // Use non-raycast logic
                 Vector3 direction = (projectileDirectionObject.transform.position - RockSpikeSpawnPoint.position).normalized;
+                AudioManager.Instance.PlaySound(normalEarthSound);
 
                 GameObject bullet = Instantiate(earthBullet, RockSpikeSpawnPoint.position, Quaternion.LookRotation(direction));
                 bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed);
@@ -388,6 +419,7 @@ public class PlayerController : MonoBehaviour
                     {
                         Vector3 direction = (hit.point - waterSwordSpawnPoint2.position).normalized;
                         Quaternion rotation = Quaternion.LookRotation(direction);
+                        AudioManager.Instance.PlaySound(skillEarthSound);
 
                         GameObject fireball = Instantiate(earthBall, waterSwordSpawnPoint2.position, rotation);
                         playerStats.currentMana -= manaCostEarthSkill;
@@ -401,6 +433,7 @@ public class PlayerController : MonoBehaviour
                 {
                     Vector3 direction = (projectileDirectionObject.transform.position - waterSwordSpawnPoint2.position).normalized;
                     Quaternion rotation = Quaternion.LookRotation(direction);
+                    AudioManager.Instance.PlaySound(skillEarthSound);
 
                     GameObject fireball = Instantiate(earthBall, waterSwordSpawnPoint2.position, rotation);
                     playerStats.currentMana -= manaCostEarthSkill;
@@ -490,7 +523,7 @@ public class PlayerController : MonoBehaviour
         HandleSkillFire();
     }
     private void WaterState()
-    { 
+    {
         meshRendererToUse.sharedMaterial = materialToUse[2];
         normalStaff.SetActive(false);
         fireStaff.SetActive(false);

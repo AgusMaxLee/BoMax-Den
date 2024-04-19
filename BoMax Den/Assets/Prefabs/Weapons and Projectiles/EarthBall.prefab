@@ -4980,7 +4980,8 @@ MonoBehaviour:
   explosionRadius: 6
   explosionForce: 500
   particlesPrefab: {fileID: 7368629966905635090, guid: c0fa61d18ab1a50499ff909434f1b391, type: 3}
-  damage: 35
+  damage: 55
+  explosionSFX: {fileID: 8300000, guid: 6fbd529d00d104a468b3bd1e5dbd0bca, type: 3}
 --- !u!114 &7915523740964021918
 MonoBehaviour:
   m_ObjectHideFlags: 0

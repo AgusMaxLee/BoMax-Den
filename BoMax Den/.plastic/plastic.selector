@@ -1,4 +1,0 @@
-repository "BoMax Den@ajaypreetkalsi432@cloud"
-  path "/"
-    br "/main"
-    co "/main"

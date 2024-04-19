@@ -82,7 +82,7 @@ public class EarthBossAI : MonoBehaviour
             Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
             if (bulletRb != null)
             {
-                bulletRb.AddForce(directionToPlayer * 60, ForceMode.Impulse);
+                bulletRb.AddForce(directionToPlayer * 90, ForceMode.Impulse);
             }
             else
             {

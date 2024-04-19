@@ -7,14 +7,15 @@ public class EnemyHealth : MonoBehaviour
     public UnityEvent<int> onTakeDamage;
 
     [SerializeField] private FloatingHealthBar healthBar;
-    private Animator animator;
-    private bool isHurtCooldown = false;
-    public float hurtCooldownTime = 1f; // Cooldown time for the "hurt" animation in seconds
+    private EnemyAnimation enemyAnimation;
+
+    [SerializeField] private AudioClip deathSound;
+
 
     private void Awake()
     {
         healthBar = GetComponentInChildren<FloatingHealthBar>();
-        animator = GetComponent<Animator>();
+        enemyAnimation = GetComponent<EnemyAnimation>();
     }
 
     public void Start()
@@ -25,7 +26,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        if (currentHealth > 0 && !isHurtCooldown) // Check if not in cooldown
+        if (currentHealth > 0) // Remove the condition for hurt cooldown    
         {
             currentHealth -= amount;
             onTakeDamage?.Invoke(amount);
@@ -38,23 +39,14 @@ public class EnemyHealth : MonoBehaviour
             }
             else
             {
-                // Set the "IsHurt" parameter to true for the duration of the "hurt" animation
-                animator.SetBool("isHurt", true);
-                isHurtCooldown = true; // Start the cooldown
-                Invoke(nameof(ResetHurtCooldown), hurtCooldownTime); // Reset the cooldown after the specified time
+                enemyAnimation.StartHurtAnimation();  // Trigger the hurt animation
             }
         }
     }
 
-    private void ResetHurtCooldown()
-    {
-        animator.SetBool("isHurt", false);
-        isHurtCooldown = false; // Reset the cooldown flag
-    }
-
     private void Die()
     {
-        // Additional actions when the enemy dies
+        AudioManager.Instance.PlaySound(deathSound);
         Destroy(gameObject);
     }
 }

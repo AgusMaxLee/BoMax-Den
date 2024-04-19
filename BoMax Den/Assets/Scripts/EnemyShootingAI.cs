@@ -20,11 +20,7 @@ public class ShootingAI : MonoBehaviour
 
     public float projectileSpeed = 32f;
 
-    private void Awake()
-    {
-        player = GameObject.FindWithTag("Player")?.transform;
-        agent = GetComponent<NavMeshAgent>();
-    }
+    [SerializeField] private Transform playerTransform; // Serialized field for the player's transform
 
     private void Start()
     {
@@ -35,8 +31,14 @@ public class ShootingAI : MonoBehaviour
 
     private void Update()
     {
-        playerInSightRange = CheckSphere(transform.position, sightRange, "Player");
-        playerInAttackRange = CheckSphere(transform.position, attackRange, "Player");
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("Player transform not assigned in ShootingAI script.");
+            return;
+        }
+
+        playerInSightRange = CheckSphere(transform.position, sightRange, playerTransform.gameObject);
+        playerInAttackRange = CheckSphere(transform.position, attackRange, playerTransform.gameObject);
 
         if (!playerInSightRange && !playerInAttackRange)
         {
@@ -55,12 +57,12 @@ public class ShootingAI : MonoBehaviour
         }
     }
 
-    private bool CheckSphere(Vector3 position, float radius, string tag)
+    private bool CheckSphere(Vector3 position, float radius, GameObject target)
     {
         Collider[] colliders = Physics.OverlapSphere(position, radius);
         foreach (Collider collider in colliders)
         {
-            if (collider.CompareTag(tag))
+            if (collider.gameObject == target)
             {
                 return true;
             }
@@ -88,14 +90,14 @@ public class ShootingAI : MonoBehaviour
 
     private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
+        agent.SetDestination(playerTransform.position);
         agent.speed = patrolSpeed * 2;
     }
 
     private void AttackPlayer()
     {
         agent.SetDestination(transform.position);
-        transform.LookAt(player);
+        transform.LookAt(playerTransform);
 
         if (!alreadyAttacked)
         {

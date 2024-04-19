@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerLook : MonoBehaviour
 {
-    [SerializeField] private float sensitivity = 1;
+    [SerializeField] public float sensitivity = 1;
     [SerializeField] private float yClamp = 60;
     Rigidbody rb;
     private float xRotation = 0;

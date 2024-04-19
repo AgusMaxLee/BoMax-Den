@@ -6,11 +6,8 @@ TagManager:
   tags:
   - Floor
   - Enemy
-  - Fire
-  - bullet
-  - minion
-  - Minion
-  - DynamicMinion
+  - PlayButton
+  - QuitButton
   layers:
   - Default
   - TransparentFX

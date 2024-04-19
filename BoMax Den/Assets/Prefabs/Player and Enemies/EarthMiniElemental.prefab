@@ -625,7 +625,7 @@ MonoBehaviour:
   shootingSpeed: 2
   maxRateIncreaseDistance: 5
   minShootingInterval: 0.67
-  shootingRange: 10
+  shootingRange: 80
 --- !u!114 &8714134058926709756
 MonoBehaviour:
   m_ObjectHideFlags: 0

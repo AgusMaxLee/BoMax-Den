@@ -10,8 +10,10 @@ public class AppleManager : MonoBehaviour
     public GameObject appleCounterDisplay;
     private int appleCount;
     public int healingAmount = 25;
-    public float healCooldown = 1.5f; 
-    private float lastHealTime; 
+    public float healCooldown = 1.5f;
+    private float lastHealTime;
+    [SerializeField] private AudioClip pickupSound;
+    [SerializeField] private AudioClip eatSound;
 
     private void Awake()
     {
@@ -44,6 +46,7 @@ public class AppleManager : MonoBehaviour
     public void CollectApple()
     {
         appleCount++;
+        AudioManager.Instance.PlaySound(pickupSound);
         UpdateAppleCounterDisplay();
     }
 
@@ -53,7 +56,7 @@ public class AppleManager : MonoBehaviour
         {
             appleCount--;
             UpdateAppleCounterDisplay();
-
+            AudioManager.Instance.PlaySound(eatSound);
             PlayerStats playerStats = FindObjectOfType<PlayerStats>();
             if (playerStats != null)
             {

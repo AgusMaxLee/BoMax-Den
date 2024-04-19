@@ -17,6 +17,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] public int manaRegenRate = 10;
     [SerializeField] public int healthRegenRate = 10;
     [SerializeField] PlayerStatsUI playerStatsUI;
+    [SerializeField] private AudioClip deathSound;
+    [SerializeField] AudioClip playerdamage_off; // el sonido del jugador cuando hace off!
+
+
+
 
     private int baseMaxHealth = 100;
     private int baseMaxMana = 100;
@@ -31,7 +36,7 @@ public class PlayerStats : MonoBehaviour
     public UnityEvent onDeath;
 
     private bool isDead = false;
-    private bool isTakingDamage = false; // Added variable declaration
+    private bool isTakingDamage = false;
     private void Awake()
     {
         controls = new PlayerControls();
@@ -75,16 +80,20 @@ public class PlayerStats : MonoBehaviour
         {
             currentHealth -= amount;
             onTakeDamage?.Invoke(amount);
+
             animator.SetTrigger("TakeDamage");
             Debug.Log("Player took damage. Current Health: " + currentHealth);
-
             if (currentHealth <= 0)
             {
                 Die();
             }
             else
             {
+
                 StartCoroutine(TakeDamageCoroutine());
+                AudioManager.Instance.PlaySound(playerdamage_off);
+
+
             }
         }
     }
@@ -100,6 +109,7 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("dead");
         animator.SetTrigger("Die");
+        AudioManager.Instance.PlaySound(deathSound);
         isDead = true;
         onDeath?.Invoke();
         controls.Player.Disable();

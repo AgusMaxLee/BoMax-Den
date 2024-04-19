@@ -11,6 +11,7 @@ public class ExplosiveBullet : MonoBehaviour
     [SerializeField] private int damage = 10;
     private Rigidbody rb;
 
+    [SerializeField] private AudioClip explosionSFX;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -51,6 +52,7 @@ public class ExplosiveBullet : MonoBehaviour
             }
         }
 
+        AudioManager.Instance.PlaySound(explosionSFX);
         // Instantiate and destroy particle effects
         GameObject particle = Instantiate(particlesPrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);

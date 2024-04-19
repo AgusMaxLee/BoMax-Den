@@ -515,27 +515,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.1238
+      value: -11.28
       objectReference: {fileID: 0}
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 132.98
       objectReference: {fileID: 0}
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.17525445
+      value: 129.54
       objectReference: {fileID: 0}
     - target: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       propertyPath: m_LocalRotation.w
@@ -595,6 +595,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9077082639543174056, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1876532198140676927}
+    - targetCorrespondingSourceObject: {fileID: 9077082639543174056, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4878289132681009099}
   m_SourcePrefab: {fileID: 100100000, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
 --- !u!1 &228014466060240564 stripped
 GameObject:
@@ -622,7 +625,7 @@ MonoBehaviour:
   specialShootingSpeed: 3
   maxRateIncreaseDistance: 5
   minShootingInterval: 0.67
-  shootingRange: 50
+  shootingRange: 80
 --- !u!65 &354119096745526136
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -662,8 +665,27 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   healthBar: {fileID: 2184282515374303957}
+--- !u!114 &4878289132681009099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228014466060240564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 526ef3327864bc941a5842ea5c14aa0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6809985292731565684}
+  hurtCooldownTime: 1
 --- !u!4 &603976436656348174 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8553345310010005778, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
+  m_PrefabInstance: {fileID: 9138462679084418332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6809985292731565684 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2329410943934235496, guid: 96e44255d011f5c4a961e18f28e7cb82, type: 3}
   m_PrefabInstance: {fileID: 9138462679084418332}
   m_PrefabAsset: {fileID: 0}
